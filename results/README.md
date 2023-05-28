@@ -1,7 +1,7 @@
 # results
 
 - models: directory where the outputs of the models are stored; mainly .csv and .rds files of the raw BioGeoBEARS output and 
-	- `modelfit.csv` table containing dAIC, Lnl, df, disperal, and extinction rates for all of the models. 
+	- `modelfit.csv` table containing dAIC, LnL, df, disperal, and extinction rates for all of the models. 
 	- `hyp_fits.rds` a list of all of the model-fits from BioGeoBEARS
 - Figures: 
 	- h_DEC.pdf the pie plot phyogeny output from BioGeoBEARS
