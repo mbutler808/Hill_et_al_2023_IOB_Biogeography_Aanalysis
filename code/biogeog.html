@@ -1,0 +1,1633 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.333">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Marguerite Butler and Ethan Hill">
+<meta name="dcterms.date" content="2023-05-27">
+
+<title>Analyses for Testing geology with biology: Plate tectonics and the diversification of microhylid frogs in the Papuan region</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="biogeog_files/libs/clipboard/clipboard.min.js"></script>
+<script src="biogeog_files/libs/quarto-html/quarto.js"></script>
+<script src="biogeog_files/libs/quarto-html/popper.min.js"></script>
+<script src="biogeog_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="biogeog_files/libs/quarto-html/anchor.min.js"></script>
+<link href="biogeog_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="biogeog_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="biogeog_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="biogeog_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="biogeog_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#setup-and-reproducibility" id="toc-setup-and-reproducibility" class="nav-link active" data-scroll-target="#setup-and-reproducibility">Setup and Reproducibility</a></li>
+  <li><a href="#biogeography-analyses-biogeog.r" id="toc-biogeography-analyses-biogeog.r" class="nav-link" data-scroll-target="#biogeography-analyses-biogeog.r">Biogeography analyses <code>biogeog.R</code></a>
+  <ul class="collapse">
+  <li><a href="#the-functions-include" id="toc-the-functions-include" class="nav-link" data-scroll-target="#the-functions-include">The functions include:</a></li>
+  <li><a href="#gather-the-inputs-for-biogeobears" id="toc-gather-the-inputs-for-biogeobears" class="nav-link" data-scroll-target="#gather-the-inputs-for-biogeobears">Gather the inputs for BioGeoBEARS</a></li>
+  <li><a href="#load-the-basic-model-inputs" id="toc-load-the-basic-model-inputs" class="nav-link" data-scroll-target="#load-the-basic-model-inputs">Load the basic model inputs</a></li>
+  <li><a href="#create-biogeobears-input-objects" id="toc-create-biogeobears-input-objects" class="nav-link" data-scroll-target="#create-biogeobears-input-objects">Create BioGeoBEARS input objects</a></li>
+  <li><a href="#run-the-models" id="toc-run-the-models" class="nav-link" data-scroll-target="#run-the-models">Run the models</a></li>
+  <li><a href="#save-model-output" id="toc-save-model-output" class="nav-link" data-scroll-target="#save-model-output">Save model output</a></li>
+  <li><a href="#prepare-ancestral-states-probabilities-for-plots" id="toc-prepare-ancestral-states-probabilities-for-plots" class="nav-link" data-scroll-target="#prepare-ancestral-states-probabilities-for-plots">Prepare ancestral states probabilities for plots</a></li>
+  <li><a href="#plot-biogeobears-pie-charts-on-the-phylogeny" id="toc-plot-biogeobears-pie-charts-on-the-phylogeny" class="nav-link" data-scroll-target="#plot-biogeobears-pie-charts-on-the-phylogeny">Plot BioGeoBEARS pie charts on the phylogeny</a></li>
+  <li><a href="#sensitivity-analysis" id="toc-sensitivity-analysis" class="nav-link" data-scroll-target="#sensitivity-analysis">Sensitivity analysis</a></li>
+  </ul></li>
+  <li><a href="#biogeography-functions-biogeog_functions.r" id="toc-biogeography-functions-biogeog_functions.r" class="nav-link" data-scroll-target="#biogeography-functions-biogeog_functions.r">Biogeography functions <code>biogeog_functions.R</code></a>
+  <ul class="collapse">
+  <li><a href="#biogeo_obj" id="toc-biogeo_obj" class="nav-link" data-scroll-target="#biogeo_obj"><code>biogeo_obj()</code></a></li>
+  <li><a href="#hypothesis_list" id="toc-hypothesis_list" class="nav-link" data-scroll-target="#hypothesis_list"><code>hypothesis_list()</code></a></li>
+  <li><a href="#accessory-functions" id="toc-accessory-functions" class="nav-link" data-scroll-target="#accessory-functions">Accessory functions</a></li>
+  <li><a href="#model_fit_table" id="toc-model_fit_table" class="nav-link" data-scroll-target="#model_fit_table"><code>model_fit_table()</code></a></li>
+  </ul></li>
+  <li><a href="#plot-biogeographical-evolution-tree-tree_plotting_dec.r" id="toc-plot-biogeographical-evolution-tree-tree_plotting_dec.r" class="nav-link" data-scroll-target="#plot-biogeographical-evolution-tree-tree_plotting_dec.r">Plot Biogeographical Evolution Tree <code>tree_plotting_DEC.R</code></a>
+  <ul class="collapse">
+  <li><a href="#read-inputs" id="toc-read-inputs" class="nav-link" data-scroll-target="#read-inputs">Read inputs</a></li>
+  <li><a href="#add-georegions-to-tree.data" id="toc-add-georegions-to-tree.data" class="nav-link" data-scroll-target="#add-georegions-to-tree.data">Add georegions to tree.data</a></li>
+  <li><a href="#organize-georegions-names-colors" id="toc-organize-georegions-names-colors" class="nav-link" data-scroll-target="#organize-georegions-names-colors">Organize georegions names, colors</a></li>
+  <li><a href="#node-probabilities-and-pies" id="toc-node-probabilities-and-pies" class="nav-link" data-scroll-target="#node-probabilities-and-pies">Node probabilities and pies</a></li>
+  <li><a href="#plot-phylogeny-with-pies-using-ggtree" id="toc-plot-phylogeny-with-pies-using-ggtree" class="nav-link" data-scroll-target="#plot-phylogeny-with-pies-using-ggtree">Plot phylogeny with pies using <code>ggtree</code></a></li>
+  </ul></li>
+  <li><a href="#plot-range-transitions-through-time-genera_thru_time.r" id="toc-plot-range-transitions-through-time-genera_thru_time.r" class="nav-link" data-scroll-target="#plot-range-transitions-through-time-genera_thru_time.r">Plot range transitions through time <code>genera_thru_time.R</code></a>
+  <ul class="collapse">
+  <li><a href="#input-data" id="toc-input-data" class="nav-link" data-scroll-target="#input-data">Input data</a></li>
+  <li><a href="#plot-the-dispersals" id="toc-plot-the-dispersals" class="nav-link" data-scroll-target="#plot-the-dispersals">Plot the dispersals</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Analyses for <em>Testing geology with biology: Plate tectonics and the diversification of microhylid frogs in the Papuan region</em></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Marguerite Butler and Ethan Hill </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">May 27, 2023</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<p>This Quarto document provides a walk through of the analyses used in Hill <span class="citation" data-cites="Hill:2023a">(<a href="#ref-Hill:2023a" role="doc-biblioref">2023a</a>)</span>, which explored biogeographic explanations for the hyper-diversity of the asterophryne frogs of the Papuan region. This study analyzed a phylogenetic tree with 218 tips found throughout the Papuan region in 13 georegions <span class="citation" data-cites="Hill:2022 Hill:2023">(tree and data previously published in <a href="#ref-Hill:2022" role="doc-biblioref">Hill et al. 2022</a>, <a href="#ref-Hill:2023" role="doc-biblioref">2023b</a>)</span>. We fit DEC models of geographical range evolution along a phylogeny using the <code>BioGeoBEARS</code> package. These models estimate the rates of dispersal, extinction, and cladogenesis, and estimate ancestral georegions at each node of the tree. Because we use a time-calibrated phylogeny, we can reconstruct the timing of range shifts between georegions along the phylogeny and test hypotheses of geology involving plate tectonic movements.</p>
+<p>This script is written to fit DEC models with all of the inputs saved to the <code>data</code> folder. Most of the primary data is pulled in from the permanent <a href="https://github.com/mbutler808/Asterophryinae_phylogenetic_data#asterophryinae_phylogenetic_data-">GitHub repository</a> linked to <a href="https://doi.org/10.5281/zenodo.7063168" class="uri">https://doi.org/10.5281/zenodo.7063168</a>.</p>
+<p>The functions are written generically, and could be reused to test other hypotheses or datasets by changing the input files below with minor code editing of the script. For example, because all of our species occupy single georegion ranges, we do not use DEC-J, and we limit the maxmimum number of simultaneous ranges to two (the minimum number). These are options that can be changed.</p>
+<p>The geological hypotheses we test are specified in the setup of the following data matrices and files. Please see Nick Matzkeʻs <a href="http://phylo.wikidot.com/biogeobears">BioGeoBEARS wiki</a> and <span class="citation" data-cites="Matzke:2013">Matzke (<a href="#ref-Matzke:2013" role="doc-biblioref">2013</a>)</span> for explanation of these inputs, and <span class="citation" data-cites="Hill:2023a">Hill et al. (<a href="#ref-Hill:2023a" role="doc-biblioref">2023a</a>)</span> for explanation of the geological hypotheses.</p>
+<table class="table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>File in <code>data</code></th>
+<th>Contents</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>geobins.txt</code></td>
+<td>tip labels (matching the tree) and the present-day geographical region of the taxa</td>
+</tr>
+<tr class="even">
+<td><code>biogeo.tree</code></td>
+<td>the phylogenetic tree - disable reading from the GitHub repo if you want to substitute the tree</td>
+</tr>
+<tr class="odd">
+<td><code>dispersal_matrices\hyp.txt</code></td>
+<td>dispersal matrices associated with the hypotheses</td>
+</tr>
+<tr class="even">
+<td><code>areas_allowed/hyp.txt</code></td>
+<td>areas allowed matrices. Files should be named according to the name of the hypothesis</td>
+</tr>
+<tr class="odd">
+<td><code>time_periods/hyp.txt</code></td>
+<td>time periods associated with time-stratified hypotheses, these require associated areas allowed matrices</td>
+</tr>
+<tr class="even">
+<td><code>hypotheses.csv</code></td>
+<td>a master data frame that associates hypotheses names, hypotheses short codes, and the names of their associated dispersal, time_periods, and areas_allowed files (if any)</td>
+</tr>
+<tr class="odd">
+<td><code>georegion_colors.csv</code></td>
+<td>custom colors, codes, and pretty names associated with the georegions</td>
+</tr>
+<tr class="even">
+<td><code>sensitivity_trees/tree_X.nwk</code></td>
+<td>a sample of phylogenetic trees to run sensitivity analyses for phylogenetic uncertainty - replace with your own best trees if you want to do this on your own data</td>
+</tr>
+</tbody>
+</table>
+<section id="setup-and-reproducibility" class="level1">
+<h1>Setup and Reproducibility</h1>
+<p>The analysis can be reproduced by running or sourcing the three R scripts below (<code>biogeog_functions.R</code> is sourced in <code>biogeog.R</code>), or by rerunning this single quarto document, which is written to pull the following R scripts into memory so that the code chunks can be used in the document below.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">read_chunk</span>(<span class="st">'biogeog.R'</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">read_chunk</span>(<span class="st">'biogeog_functions.R'</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">read_chunk</span>(<span class="st">'tree_plotting_DEC.R'</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">read_chunk</span>(<span class="st">'genera_thru_time.R'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="biogeography-analyses-biogeog.r" class="level1">
+<h1>Biogeography analyses <code>biogeog.R</code></h1>
+<p>Load needed packages to run the DEC models.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(BioGeoBEARS)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># installed from https://github.com/nmatzke/BioGeoBEARS/tree/master</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># version number 1.1.3</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(treeio)  </span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Load custom functions into memory.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">### Load functions to run BioGeoBEARS models</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"biogeog_functions.R"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="the-functions-include" class="level3">
+<h3 class="anchored" data-anchor-id="the-functions-include">The functions include:</h3>
+<ul>
+<li><code>biogeo_obj()</code>: Creates the input object for running BioGeoBEARS models<br>
+</li>
+<li><code>hypothesis_list()</code> : Assembles a list of hypotheses to run through BioGeoBEARS models conveniently.<br>
+</li>
+<li><code>"%w/o%"</code> : Returns the vector elements of X without Y.<br>
+</li>
+<li><code>logLik.bgb()</code> : Returns the log likelihood from BioGeoBEARS model output.<br>
+</li>
+<li><code>AIC.bgb()</code> Returns the AIC value from BioGeoBEARS model output.<br>
+</li>
+<li><code>model_fit_table()</code> : Creates a model fit table from a list of BioGeoBEARS model outputs.</li>
+</ul>
+<p>More details on these functions are explained at the end of this document.</p>
+</section>
+<section id="gather-the-inputs-for-biogeobears" class="level3">
+<h3 class="anchored" data-anchor-id="gather-the-inputs-for-biogeobears">Gather the inputs for BioGeoBEARS</h3>
+<p>The ARGUMENTS to <code>BioGeoBEARS</code> are file names with paths to the file locations, as follows:</p>
+<div id="tbl-bgbinputs" class="anchored">
+<table class="table">
+<caption>Table&nbsp;1: BioGeoBEARS inputs with brief explanations.</caption>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name in current script</th>
+<th>BioGeoBEARS name</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>treefile</td>
+<td>trfn</td>
+<td>tree in nexus format</td>
+</tr>
+<tr class="even">
+<td>geo</td>
+<td>geogfn</td>
+<td>geographic data, here in PHYLIP format</td>
+</tr>
+<tr class="odd">
+<td>disperal</td>
+<td>dispersal_multipliers_fn</td>
+<td>dispersal multiplier matrix</td>
+</tr>
+<tr class="even">
+<td>timeperiods</td>
+<td>timesfn</td>
+<td>time stratification matrix</td>
+</tr>
+<tr class="odd">
+<td>areasallowed</td>
+<td>areas_allowed_fn</td>
+<td>areas allowed matrix</td>
+</tr>
+<tr class="even">
+<td>hdat</td>
+<td></td>
+<td>The <code>hypotheses.csv</code> file contains an organizational dataframe to keep track of all of the parts for each hypothesis: names and codes for our custom hypotheses, along with the associated dispersal, timeperiods, and areas allowed matrices, if any</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>In our repository, these files are in the <code>data</code> folder.</p>
+</section>
+<section id="load-the-basic-model-inputs" class="level3">
+<h3 class="anchored" data-anchor-id="load-the-basic-model-inputs">Load the basic model inputs</h3>
+<p>To see the structure of BioGeoBEARS model input (see <a href="#tbl-bgbinputs">Table&nbsp;1</a>), open the text files in the <code>data</code> folder.</p>
+<p>Note that we are accessing a published phylogeny from a GitHub repository, but in order to run BioGeoBEARS, we write the file to our <code>data</code> directory. If you want to run it on a different tree, you can edit the code <code>treefile</code> to point to your own tree file.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="do">#######################</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Gather the inputs</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="do">#######################</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># The tree comes from Hill et al 2022 and Hill et al 2023</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co"># and is converted to phylo format for use with BioGeoBEARS</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>treefile <span class="ot">=</span> <span class="st">"https://github.com/mbutler808/Asterophryinae_phylogenetic_data/blob/main/BEAST2_analysis/beast_218_tree_asterophryinae.nex?raw=TRUE"</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>tree <span class="ot">&lt;-</span> <span class="fu">read.beast</span>(treefile) <span class="sc">%&gt;%</span> as.phylo</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="fu">write.tree</span>(tree, <span class="st">"../data/biogeo.tree"</span>)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>treefile <span class="ot">=</span> <span class="st">"../data/biogeo.tree"</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>geo <span class="ot">=</span> <span class="st">"../data/geobins.txt"</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>hdat <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">"../data/hypotheses.csv"</span>)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>hypotheses <span class="ot">&lt;-</span> hdat<span class="sc">$</span>hypothesis</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(hypotheses) <span class="ot">&lt;-</span> hdat<span class="sc">$</span>id</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Because we have a lot of models of different types, it is convenient to organize the hypotheses into groups by whether or not they are unconstrained, time-stratified, or have dispersal matrices (including time-stratified), because they have different inputs. Each of these vectors contains the hypothesis codes for their group.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>hyp_un <span class="ot">&lt;-</span> hdat<span class="sc">$</span>id[ hdat<span class="sc">$</span>dispersal_multipliers<span class="sc">==</span><span class="st">""</span> ] <span class="co"># unconstrained</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>hyp_ts <span class="ot">&lt;-</span> hdat<span class="sc">$</span>id[ hdat<span class="sc">$</span>time_periods<span class="sc">!=</span><span class="st">""</span> ]  <span class="co"># time-stratified</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>hyp_dm <span class="ot">&lt;-</span> hdat<span class="sc">$</span>id[ <span class="sc">!</span>hdat<span class="sc">$</span>id <span class="sc">%in%</span> hyp_un ]  <span class="co"># with dispersal matrices (includes ts)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>hyp_dm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>hyp_ts </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "j" "k"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>hyp_un </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "DEC"</code></pre>
+</div>
+</div>
+<p>Create model inputs as vectors.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># paths to model inputs</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>dispersal <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">"../data/dispersal_matrices/"</span>, </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                   hdat<span class="sc">$</span>dispersal_multipliers, </span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>                   <span class="st">".txt"</span>, </span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">sep=</span><span class="st">""</span>)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>timeperiods <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">"../data/time_periods/"</span>, </span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>                     hypotheses, </span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>                     <span class="st">".txt"</span>, </span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>                     <span class="at">sep=</span><span class="st">""</span>)</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>areasallowed <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">"../data/areas_allowed/"</span>, </span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>                      hypotheses, </span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>                      <span class="st">".txt"</span>, </span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>                      <span class="at">sep=</span><span class="st">""</span> )</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(dispersal) <span class="ot">&lt;-</span> <span class="fu">names</span>(areasallowed) <span class="ot">&lt;-</span> <span class="fu">names</span>(timeperiods) <span class="ot">&lt;-</span> <span class="fu">names</span>(hypotheses)</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="co"># remove empty filenames, just to be safe</span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>dispersal <span class="ot">&lt;-</span> dispersal[hyp_dm]</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>timeperiods <span class="ot">&lt;-</span> timeperiods[hyp_ts]</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>areasallowed <span class="ot">&lt;-</span> areasallowed[hyp_ts]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>dispersal </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                                              a 
+               "../data/dispersal_matrices/slow_and_steady.txt" 
+                                                              b 
+          "../data/dispersal_matrices/current_connectivity.txt" 
+                                                              c 
+         "../data/dispersal_matrices/louisiade_archipelago.txt" 
+                                                              d 
+       "../data/dispersal_matrices/woodlark_with_louisiade.txt" 
+                                                              e 
+                 "../data/dispersal_matrices/owen_stanleys.txt" 
+                                                              f 
+      "../data/dispersal_matrices/historical_owen_stanleys.txt" 
+                                                              g 
+            "../data/dispersal_matrices/offshore_with_epct.txt" 
+                                                              h 
+"../data/dispersal_matrices/offshore_with_nearest_mainland.txt" 
+                                                              i 
+        "../data/dispersal_matrices/offshore_with_accreted.txt" 
+                                                              j 
+                   "../data/dispersal_matrices/mobile_belt.txt" 
+                                                              k 
+              "../data/dispersal_matrices/recent_emergence.txt" 
+                                                              l 
+                      "../data/dispersal_matrices/distance.txt" </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>timeperiods </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                          j 
+     "../data/time_periods/mobile_belt.txt" 
+                                          k 
+"../data/time_periods/recent_emergence.txt" </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>areasallowed</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                           j 
+     "../data/areas_allowed/mobile_belt.txt" 
+                                           k 
+"../data/areas_allowed/recent_emergence.txt" </code></pre>
+</div>
+</div>
+</section>
+<section id="create-biogeobears-input-objects" class="level2">
+<h2 class="anchored" data-anchor-id="create-biogeobears-input-objects">Create BioGeoBEARS input objects</h2>
+<p>Now we are ready to run the <code>BioGeoBEARS</code> functions to create input objects. These are stored as a named list, named by the hypothesis.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="do">##############################################</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="do">## Create BioGeoBEARS input objects </span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="do">##############################################</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co"># inputs are vectors created above</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>h <span class="ot">&lt;-</span> <span class="fu">hypothesis_list</span>( hyp_dm,   <span class="co"># names of dispersal multiplier hypotheses</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>                      hyp_ts,   <span class="co">#          time-stratified hypotheses</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>                      hyp_un,   <span class="co">#          unconstrained hypotheses</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>                      treefile,     <span class="co"># paths to treefile</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>                      geo,      <span class="co"># paths to geobins file</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>                      dispersal, <span class="co"># paths to dispersal matrices files</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>                      timeperiods, <span class="co"># paths to time periods files</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>                      areasallowed <span class="co"># paths to areas allowed files</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>                    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+1- top: 0, bot: 12, rel_bot: 12
+
+2- top: 12, bot: 30, rel_bot: 18
+
+1- top: 0, bot: 5, rel_bot: 5
+
+2- top: 5, bot: 30, rel_bot: 25</code></pre>
+</div>
+</div>
+</section>
+<section id="run-the-models" class="level2">
+<h2 class="anchored" data-anchor-id="run-the-models">Run the models</h2>
+<p>This code will run all of the models in the list. It takes about 20 minutes on my laptop. If you want to just run one model, follow the commented out version instead.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="do">#######################</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the models</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="do">#######################</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="co"># run all the models</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">lapply</span>( h, bears_optim_run )</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="co"># run one model at a time</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="co">#  fit1 &lt;- bears_optim_run(hyp[["a"]])</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="co">#  fit2 &lt;- bears_optim_run(hyp[["b"]])</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="save-model-output" class="level2">
+<h2 class="anchored" data-anchor-id="save-model-output">Save model output</h2>
+<p>Gather the scores for each model and put them into a table <code>scores</code>. It is sorted by AIC score, so the first one is the best model.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="do">##############################################</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Collect the model fit statistics</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="do">##############################################</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>scores <span class="ot">&lt;-</span> <span class="fu">model_fit_table</span>(fit)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>best_id <span class="ot">&lt;-</span> scores<span class="sc">$</span>id[<span class="dv">1</span>]</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>best_fit <span class="ot">&lt;-</span> fit[[best_id]]</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>scores</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     id                     hypotheses  delta_aic    m2logL df   dispersal
+h     h offshore_with_nearest_mainland   0.000000  996.2568  2 0.009388873
+g     g             offshore_with_epct   5.506394 1001.7632  2 0.008647029
+f     f       historical_owen_stanleys  10.030803 1006.2876  2 0.009638641
+DEC DEC              unconstrained_DEC  23.230091 1019.4868  2 0.004623482
+e     e                  owen_stanleys  76.043722 1072.3005  2 0.011050733
+l     l                       distance 118.091669 1114.3484  2 0.017728540
+i     i         offshore_with_accreted 188.220107 1184.4769  2 0.018771637
+d     d        woodlark_with_louisiade 289.061658 1285.3184  2 0.027070428
+c     c          louisiade_archipelago 338.049377 1334.3061  2 0.028144200
+a     a                slow_and_steady 382.792484 1379.0492  2 0.030117978
+j     j                    mobile_belt 402.431695 1398.6885  2 0.034276253
+b     b           current_connectivity 435.806608 1432.0634  2 0.017430099
+k     k               recent_emergence 691.469531 1687.7263  2 0.092944968
+    extinction
+h   0.02061541
+g   0.02057898
+f   0.02037073
+DEC 0.01802977
+e   0.02073542
+l   0.02551608
+i   0.03370028
+d   0.02489728
+c   0.02335633
+a   0.02322942
+j   0.02846149
+b   0.01954069
+k   0.05890621</code></pre>
+</div>
+</div>
+<p>Finally, save the model outputs into the <code>results/models</code> folder for use later. <code>.rds</code> files are in R format, whereas <code>.csv</code> is a text format readable by spreadsheet programs.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="do">##############################################</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Save model fit results</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="do">##############################################</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>( </span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>         fit, </span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">file=</span><span class="st">"../results/models/hyp_fits.rds"</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>       ) <span class="co"># model fits as R objects</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>         best_fit, </span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">file=</span><span class="st">"../results/models/best_fit.rds"</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>       )</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>           scores, </span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>           <span class="st">"../results/models/modelfittable.csv"</span>, </span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>           <span class="at">row.names =</span> F, <span class="at">quote =</span> F</span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>         ) <span class="co"># scores, parameters</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="prepare-ancestral-states-probabilities-for-plots" class="level2">
+<h2 class="anchored" data-anchor-id="prepare-ancestral-states-probabilities-for-plots">Prepare ancestral states probabilities for plots</h2>
+<p>Consolidate probabilities for pie charts showing range transitions. BioGeoBEARS creates multi-area probabilities by default, and the fewest possible areas allowed is two. Since our frogs are low-disperal species that occupy only one georegion (i.e., they are single-area species), we consolidate these dual-area probabilities to single areas by summing half of each dual-area probability with their single area probabilities.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>statenames <span class="ot">&lt;-</span> <span class="fu">names</span>(</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>                best_fit<span class="sc">$</span>inputs<span class="sc">$</span>list_of_dispersal_multipliers_mats[[<span class="dv">1</span>]]</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>              ) <span class="co"># vector of georegion codes</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>probs <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>              best_fit<span class="sc">$</span>ML_marginal_prob_each_state_at_branch_top_AT_node</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>            ) <span class="co"># the probabilities</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(probs) <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"0"</span>, </span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>                  statenames, </span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">apply</span>(</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">combn</span>(statenames,<span class="dv">2</span>), </span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>                    <span class="dv">2</span>, </span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>                    paste, </span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>                    <span class="at">collapse=</span><span class="st">""</span></span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>                  )</span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>                ) <span class="co"># the BioGeoBEARS probability matrix has the null prob,</span></span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>                  <span class="co"># single state probs, followed by multi-state probs</span></span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>pies <span class="ot">&lt;-</span> probs[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">length</span>(statenames)<span class="sc">+</span><span class="dv">1</span>)]  <span class="co"># the first set are single-areas </span></span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (ii <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(statenames)) { <span class="co"># parse the multi-areas</span></span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a>  tt <span class="ot">&lt;-</span> <span class="fu">grep</span>(statenames[ii], <span class="fu">names</span>(probs)) <span class="co"># pointers to state names</span></span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a>    <span class="co"># for each pie, after the null state, we sum the single-area pie</span></span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a>    <span class="co"># with half of each of the two-area pies </span></span>
+<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a>    <span class="co"># (n = south east asia)  </span></span>
+<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a>  pies[ii<span class="sc">+</span><span class="dv">1</span>] <span class="ot">&lt;-</span> probs[tt[<span class="dv">1</span>]] <span class="sc">+</span> <span class="fu">rowSums</span>(<span class="fl">0.5</span><span class="sc">*</span>probs[tt[<span class="sc">-</span><span class="dv">1</span>]])   </span>
+<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(pies, <span class="st">"../results/models/prob_pies_13.csv"</span>, <span class="at">row.names=</span>F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+EXPLANATION:
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The trick is to find the label rows with each terrane letter, say:</p>
+<blockquote class="blockquote">
+<p>n &lt;- grep(“n”, column_labels)</p>
+</blockquote>
+<p>Then use that index to add the partial probabilities together. The first occurance of the state name is the single-area probability. To that we add the partial probability of each double-letter area</p>
+<p>We split the dual area probability 50-50 between the two areas:</p>
+<blockquote class="blockquote">
+<p>pies[2] &lt;- probs[n[1]] + rowSums(0.5*probs[n[-1]]) # n (south east asia)</p>
+</blockquote>
+<p>The first statename correspponds to the second column of the probs matrix, as the first column is the null probability</p>
+</div>
+</div>
+</section>
+<section id="plot-biogeobears-pie-charts-on-the-phylogeny" class="level2">
+<h2 class="anchored" data-anchor-id="plot-biogeobears-pie-charts-on-the-phylogeny">Plot BioGeoBEARS pie charts on the phylogeny</h2>
+<p>This produces the default <code>BioGeoBEARS</code> plot output.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="do">##############################################</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot BioGeoBEARS pie charts </span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="do">##############################################</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co"># out &lt;- readRDS("../../results/models/hyp_fits.rds")</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="co"># scores &lt;- read.csv("../../results/models/modelfit.csv")</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="fu">pdf</span>(<span class="at">file =</span> <span class="st">"../results/h_DEC2.pdf"</span>, <span class="at">height =</span> <span class="dv">45</span>, <span class="at">width =</span> <span class="dv">20</span>)</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_BioGeoBEARS_results</span>( best_fit,</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>                            <span class="at">plotwhat =</span> <span class="st">"pie"</span>,</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>                            <span class="at">splitcex=</span>.<span class="dv">4</span>,</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>                            <span class="at">statecex=</span>.<span class="dv">4</span>,</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>                            <span class="at">plotlegend =</span> T,</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>                            <span class="at">plotsplits =</span> F</span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>                                             )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        LnL nparams           d          e
+1 -498.1284       2 0.009388873 0.02061541</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_BioGeoBEARS_results</span>( best_fit,</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>                            <span class="at">plotwhat =</span> <span class="st">"text"</span>,</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>                            <span class="at">splitcex=</span>.<span class="dv">4</span>,</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>                            <span class="at">statecex=</span>.<span class="dv">4</span>,</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>                            <span class="at">plotlegend =</span> T,</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>                            <span class="at">plotsplits =</span> F</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>                          )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="biogeog_files/figure-html/plot_pies-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="cell-output-display">
+<p><img src="biogeog_files/figure-html/plot_pies-2.png" class="img-fluid" width="672"></p>
+</div>
+<div class="cell-output-display">
+<p><img src="biogeog_files/figure-html/plot_pies-3.png" class="img-fluid" width="672"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        LnL nparams           d          e
+1 -498.1284       2 0.009388873 0.02061541</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>pdf 
+  3 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="do">##############################################</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="sensitivity-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="sensitivity-analysis">Sensitivity analysis</h2>
+<p>Warning! This will take over 30 hours to complete. To run this, set this flag to <code>true</code> in <code>biogeog.R</code> (near the top of the script) and source the script.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="do">### Do we want to run sensitivity analysis on 100 best trees? </span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>run_sensitivity_analysis <span class="ot">=</span> <span class="cn">FALSE</span>  <span class="co"># Will take ~30 hours of run time</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>It runs the complete analysis 100 times, once on each of the sample of 100 best trees stored in <code>data</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Checks the effect of phylogenetic uncertainty by</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="co"># repeating analysis on each of 100 trees from </span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="co"># the end of the BEAST run </span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="do">##############################################</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>( run_sensitivity_analysis ) { <span class="co"># Will take 30 hours of run time</span></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Top 100 trees from BEAST analysis </span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># All other inputs remain the same </span></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>  trees <span class="ot">&lt;-</span> <span class="fu">list.files</span>(</span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"../data/sensitivity_trees"</span>, </span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>                     <span class="at">full.names =</span> <span class="cn">TRUE</span></span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>                   ) <span class="co"># vector of tree files</span></span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Save the scores from best models, observed + 100 trees</span></span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># First row is the observed result</span></span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a>  best_models <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"../results/models/modelfit.csv"</span>)[<span class="dv">1</span>,]</span>
+<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a>  best_models <span class="ot">&lt;-</span> <span class="fu">cbind</span>(best_models, <span class="st">"tree"</span><span class="ot">=</span>tree)   <span class="co"># Add tree path</span></span>
+<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a>                   </span>
+<span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a>  <span class="do">### Interate over trees: assemble hypotheses, run models, collect scores</span></span>
+<span id="cb34-21"><a href="#cb34-21" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (tree <span class="cf">in</span> trees) {</span>
+<span id="cb34-22"><a href="#cb34-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-23"><a href="#cb34-23" aria-hidden="true" tabindex="-1"></a>    h <span class="ot">&lt;-</span> <span class="fu">hypothesis_list</span>( hyp_dm, hyp_ts, hyp_un, tree, geo, </span>
+<span id="cb34-24"><a href="#cb34-24" aria-hidden="true" tabindex="-1"></a>                          dispersal, timeperiods, areasallowed)</span>
+<span id="cb34-25"><a href="#cb34-25" aria-hidden="true" tabindex="-1"></a>    fit <span class="ot">&lt;-</span> <span class="fu">lapply</span>( h, bears_optim_run )</span>
+<span id="cb34-26"><a href="#cb34-26" aria-hidden="true" tabindex="-1"></a>    scores <span class="ot">&lt;-</span> <span class="fu">cbind</span>( <span class="fu">model_fit_table</span>(fit), <span class="st">"tree"</span><span class="ot">=</span>tree )</span>
+<span id="cb34-27"><a href="#cb34-27" aria-hidden="true" tabindex="-1"></a>    best_models <span class="ot">&lt;-</span> <span class="fu">rbind</span>( best_models, scores[<span class="dv">1</span>,] ) </span>
+<span id="cb34-28"><a href="#cb34-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-29"><a href="#cb34-29" aria-hidden="true" tabindex="-1"></a>  }  </span>
+<span id="cb34-30"><a href="#cb34-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write.csv</span>(best_models, <span class="st">"../results/models/modelfit_sensitivity.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb34-31"><a href="#cb34-31" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="biogeography-functions-biogeog_functions.r" class="level1">
+<h1>Biogeography functions <code>biogeog_functions.R</code></h1>
+<p>These are the custom functions used in <code>biogeog.R</code> and the above.</p>
+<p>In these functions, we follow the BioGeoBEARS naming convention when using their functions, for our sanity. (Even though these are really long names!)</p>
+<ul>
+<li><code>trfn</code> = tree in nexus format<br>
+</li>
+<li><code>geogfn</code> = geographic data, in PHYLIP format<br>
+</li>
+<li><code>dispersal_multipliers_fn</code> = dispersal multiplier matrix<br>
+</li>
+<li><code>timesfn</code> = time stratification matrix<br>
+</li>
+<li><code>areas_allowed_fn</code> = areas allowed matrix</li>
+</ul>
+<section id="biogeo_obj" class="level2">
+<h2 class="anchored" data-anchor-id="biogeo_obj"><code>biogeo_obj()</code></h2>
+<p>This function is a wrapper for the BioGeoBEARS function <code>define_BioGeoBEARS_run</code> to create input objects for a given hypothesis. It returns the assembled BioGeoBEARS input object.</p>
+<p>If it is a time-stratified model or a model with dispersal multipliers, it loads the appropriate inputs. All the use has to do is set up the model inputs correctly in the <code>data</code> directory, with the entries of <code>hypothesis.csv</code> corresponding to file names in the <code>data</code> folder.</p>
+<p>We chose <code>max_range_size</code>=2 and commonly recommended options to make it run.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="do">##############################################</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="do">### Function to assemble BioGeoBEARS input object</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="do">### returns BioGeoBEARS obj</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="do">##############################################</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>biogeo_obj <span class="ot">&lt;-</span> <span class="cf">function</span>(</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>                 trfn,</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>                 geogfn, </span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>                 <span class="at">dispersal_multipliers_fn =</span> <span class="cn">NA</span>,</span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>                 <span class="at">timesfn =</span> <span class="cn">NA</span>, </span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>                 <span class="at">areas_allowed_fn =</span> <span class="cn">NA</span></span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>              ){</span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">=</span> <span class="fu">define_BioGeoBEARS_run</span>(</span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">trfn=</span>trfn, </span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">geogfn=</span>geogfn, </span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">dispersal_multipliers_fn =</span> dispersal_multipliers_fn,</span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">timesfn =</span> timesfn,</span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">areas_allowed_fn =</span> areas_allowed_fn,</span>
+<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">max_range_size =</span> <span class="dv">2</span>,</span>
+<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">min_branchlength =</span> <span class="fl">0.000001</span>,</span>
+<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">include_null_range =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb35-22"><a href="#cb35-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">num_cores_to_use =</span> <span class="dv">1</span>,</span>
+<span id="cb35-23"><a href="#cb35-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">force_sparse =</span> <span class="cn">FALSE</span></span>
+<span id="cb35-24"><a href="#cb35-24" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb35-25"><a href="#cb35-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-26"><a href="#cb35-26" aria-hidden="true" tabindex="-1"></a>  <span class="co"># This function loads inputs (e.g., dispersal multiplier matrix) </span></span>
+<span id="cb35-27"><a href="#cb35-27" aria-hidden="true" tabindex="-1"></a>  <span class="co"># into the model object, and runs some checks. Required for models to run.</span></span>
+<span id="cb35-28"><a href="#cb35-28" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">=</span> <span class="fu">readfiles_BioGeoBEARS_run</span>(x)</span>
+<span id="cb35-29"><a href="#cb35-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-30"><a href="#cb35-30" aria-hidden="true" tabindex="-1"></a>  x<span class="sc">$</span>return_condlikes_table <span class="ot">=</span> <span class="cn">TRUE</span></span>
+<span id="cb35-31"><a href="#cb35-31" aria-hidden="true" tabindex="-1"></a>  x<span class="sc">$</span>calc_TTL_loglike_from_condlikes_table <span class="ot">=</span> <span class="cn">TRUE</span></span>
+<span id="cb35-32"><a href="#cb35-32" aria-hidden="true" tabindex="-1"></a>  x<span class="sc">$</span>calc_ancprobs <span class="ot">=</span> <span class="cn">TRUE</span></span>
+<span id="cb35-33"><a href="#cb35-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-34"><a href="#cb35-34" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>( <span class="sc">!</span><span class="fu">is.na</span>(timesfn) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(areas_allowed_fn)) x<span class="ot">=</span><span class="fu">section_the_tree</span>(<span class="at">inputs=</span>x, <span class="at">make_master_table=</span><span class="cn">TRUE</span>, <span class="at">plot_pieces=</span><span class="cn">FALSE</span>)  <span class="co"># if time stratified</span></span>
+<span id="cb35-35"><a href="#cb35-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-36"><a href="#cb35-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(x)</span>
+<span id="cb35-37"><a href="#cb35-37" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="hypothesis_list" class="level2">
+<h2 class="anchored" data-anchor-id="hypothesis_list"><code>hypothesis_list()</code></h2>
+<p>This function builds the list of hypotheses. Since we have 13 hypotheses, it is convenient to assemble them into a list and then use Rʻs list utilities to run and process all of the models.</p>
+<p>We include the three indicator vectors for dispersal multipler models <code>hyp_dm</code>, time-stratified models <code>hyp_ts</code>, and unconstrained models <code>hyp_un</code> so that the function can assemble the appropriate parts.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="do">##############################################</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="do">### Function to build list of all hypotheses in an analysis</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="do">### returns a list</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="do">##############################################</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>hypothesis_list <span class="ot">&lt;-</span> <span class="cf">function</span>( hyp_dm, hyp_ts, hyp_un, tree, </span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>                             geo, dispersal, </span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>                             timeperiods, </span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>                             areasallowed ) {</span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># models with dispersal multipliers only</span></span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>  h <span class="ot">&lt;-</span> <span class="fu">lapply</span>( hyp_dm <span class="sc">%w/o%</span> hyp_ts, </span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>              <span class="cf">function</span>(x) <span class="fu">biogeo_obj</span>(</span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>                  <span class="at">trfn=</span>tree, </span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>                  <span class="at">geogfn=</span>geo,</span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>                  <span class="at">dispersal_multipliers_fn =</span> dispersal[x] </span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>              ) </span>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(h) <span class="ot">&lt;-</span> hyp_dm <span class="sc">%w/o%</span> hyp_ts</span>
+<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># no dispersal multipliers</span></span>
+<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a>  h[[hyp_un]] <span class="ot">&lt;-</span> <span class="fu">biogeo_obj</span>(<span class="at">trfn=</span>tree, <span class="at">geogfn=</span>geo)</span>
+<span id="cb36-22"><a href="#cb36-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-23"><a href="#cb36-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># dispersal multipliers and time-stratification</span></span>
+<span id="cb36-24"><a href="#cb36-24" aria-hidden="true" tabindex="-1"></a>  hts <span class="ot">&lt;-</span> <span class="fu">lapply</span>( hyp_ts, </span>
+<span id="cb36-25"><a href="#cb36-25" aria-hidden="true" tabindex="-1"></a>              <span class="cf">function</span>(x) <span class="fu">biogeo_obj</span>(</span>
+<span id="cb36-26"><a href="#cb36-26" aria-hidden="true" tabindex="-1"></a>                  <span class="at">trfn=</span>tree, </span>
+<span id="cb36-27"><a href="#cb36-27" aria-hidden="true" tabindex="-1"></a>                  <span class="at">geogfn=</span>geo,</span>
+<span id="cb36-28"><a href="#cb36-28" aria-hidden="true" tabindex="-1"></a>                  <span class="at">dispersal_multipliers_fn =</span> dispersal[x], </span>
+<span id="cb36-29"><a href="#cb36-29" aria-hidden="true" tabindex="-1"></a>                  <span class="at">timesfn =</span> timeperiods[x], </span>
+<span id="cb36-30"><a href="#cb36-30" aria-hidden="true" tabindex="-1"></a>                  <span class="at">areas_allowed_fn =</span> areasallowed[x]</span>
+<span id="cb36-31"><a href="#cb36-31" aria-hidden="true" tabindex="-1"></a>                )</span>
+<span id="cb36-32"><a href="#cb36-32" aria-hidden="true" tabindex="-1"></a>              ) </span>
+<span id="cb36-33"><a href="#cb36-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(hts) <span class="ot">&lt;-</span> hyp_ts</span>
+<span id="cb36-34"><a href="#cb36-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-35"><a href="#cb36-35" aria-hidden="true" tabindex="-1"></a>  <span class="co"># combine the hypotheses into one list </span></span>
+<span id="cb36-36"><a href="#cb36-36" aria-hidden="true" tabindex="-1"></a>  h <span class="ot">&lt;-</span> <span class="fu">c</span>(h, hts)</span>
+<span id="cb36-37"><a href="#cb36-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(h)</span>
+<span id="cb36-38"><a href="#cb36-38" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="accessory-functions" class="level2">
+<h2 class="anchored" data-anchor-id="accessory-functions">Accessory functions</h2>
+<p>Accessor functions for grabbing the <strong>log-likelihood</strong> and <strong>AIC</strong> values from the BioGeoBEARS model fit objects.</p>
+<p>The input (x) is a BioGeoBEARS model fit.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="do">##############################################</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="do">### Model Fit statistics accessors</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="do">##############################################</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>logLik.bgb <span class="ot">&lt;-</span> <span class="cf">function</span>( x ) {</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>( x<span class="sc">$</span>total_loglikelihood )</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>AIC.bgb <span class="ot">&lt;-</span> <span class="cf">function</span>( x, <span class="at">df =</span><span class="dv">2</span> ) {</span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>  L <span class="ot">&lt;-</span> <span class="fu">logLik.bgb</span>(x)</span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>  a <span class="ot">&lt;-</span> <span class="fu">getAIC</span>(<span class="at">LnL =</span> L, df)</span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(a)</span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a><span class="co"># getAIC is a BioGeoBears function:</span></span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a><span class="co"># computes AIC=−2loglikelihood+kn, where k=2 for usual AIC. n=npar</span></span>
+<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a><span class="co"># getAIC &lt;- function (LnL, numparams) </span></span>
+<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a><span class="co"># {</span></span>
+<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a><span class="co">#     AICval = 2 * numparams - 2 * LnL</span></span>
+<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a><span class="co">#     return(AICval)</span></span>
+<span id="cb37-21"><a href="#cb37-21" aria-hidden="true" tabindex="-1"></a><span class="co"># }</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This is a very convenient function for comparing two vectors and returning the members of X that are not in Y:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="do">##############################################</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="co"># y without y function:</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="do">##############################################</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="st">"%w/o%"</span> <span class="ot">&lt;-</span> <span class="cf">function</span>(x,y) { x[ <span class="sc">!</span>(x <span class="sc">%in%</span> y) ]}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="model_fit_table" class="level2">
+<h2 class="anchored" data-anchor-id="model_fit_table"><code>model_fit_table()</code></h2>
+<p>This function collects the model fit statistics for all of the hypotheses: the log likelihoods and AIC statistics, computes the delta AICs, sorts the hypotheses by fit, and returns a score table.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="do">##############################################</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="do">### Collect Model fits and parameters from </span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="do">### BioGeoBEARS output object</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="do">### returns dataframe</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="do">##############################################</span></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>model_fit_table <span class="ot">&lt;-</span> <span class="cf">function</span>( fit ) {</span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>    logL <span class="ot">&lt;-</span> <span class="fu">sapply</span>( fit, logLik.bgb )</span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>    df <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="co"># all models have df=2</span></span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>    aic <span class="ot">&lt;-</span> <span class="fu">sapply</span>( fit, AIC.bgb ) </span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>    disp <span class="ot">&lt;-</span> <span class="fu">sapply</span>( fit, <span class="cf">function</span>(x) <span class="fu">return</span>(x<span class="sc">$</span>outputs<span class="sc">@</span>params_table[<span class="dv">1</span>,<span class="dv">5</span>]) )</span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a>    ext <span class="ot">&lt;-</span> <span class="fu">sapply</span>( fit, <span class="cf">function</span>(x) <span class="fu">return</span>(x<span class="sc">$</span>outputs<span class="sc">@</span>params_table[<span class="dv">2</span>,<span class="dv">5</span>]) )</span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Write AIC, logL, df to dataframe</span></span>
+<span id="cb39-15"><a href="#cb39-15" aria-hidden="true" tabindex="-1"></a>    scores <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">id=</span><span class="fu">names</span>(aic), </span>
+<span id="cb39-16"><a href="#cb39-16" aria-hidden="true" tabindex="-1"></a>                     <span class="at">hypotheses=</span>hypotheses[<span class="fu">names</span>(aic)], </span>
+<span id="cb39-17"><a href="#cb39-17" aria-hidden="true" tabindex="-1"></a>                     <span class="at">delta_aic=</span>aic<span class="sc">-</span><span class="fu">min</span>(aic), </span>
+<span id="cb39-18"><a href="#cb39-18" aria-hidden="true" tabindex="-1"></a>                     <span class="at">m2logL=</span><span class="sc">-</span><span class="dv">2</span><span class="sc">*</span>logL, </span>
+<span id="cb39-19"><a href="#cb39-19" aria-hidden="true" tabindex="-1"></a>                     df, </span>
+<span id="cb39-20"><a href="#cb39-20" aria-hidden="true" tabindex="-1"></a>                     <span class="at">dispersal=</span>disp, </span>
+<span id="cb39-21"><a href="#cb39-21" aria-hidden="true" tabindex="-1"></a>                     <span class="at">extinction=</span>ext</span>
+<span id="cb39-22"><a href="#cb39-22" aria-hidden="true" tabindex="-1"></a>                    )</span>
+<span id="cb39-23"><a href="#cb39-23" aria-hidden="true" tabindex="-1"></a>    scores <span class="ot">&lt;-</span> scores[<span class="fu">order</span>(scores<span class="sc">$</span>delta_aic),]</span>
+<span id="cb39-24"><a href="#cb39-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(scores)</span>
+<span id="cb39-25"><a href="#cb39-25" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="plot-biogeographical-evolution-tree-tree_plotting_dec.r" class="level1">
+<h1>Plot Biogeographical Evolution Tree <code>tree_plotting_DEC.R</code></h1>
+<p>This code produces Figure 4 in the manuscript using <code>ggtree</code> <span class="citation" data-cites="Yu:2022">(<a href="#ref-Yu:2022" role="doc-biblioref">Yu 2022</a>)</span>.</p>
+<p>Tree branches are painted by majority rule of the ancestral terrane. Pies represent probabilities of ancestral states at nodes</p>
+<p>Model outputs produced in <code>biogeog.R</code>. The tree and geographical data comes from <span class="citation" data-cites="Hill:2022">Hill et al. (<a href="#ref-Hill:2022" role="doc-biblioref">2022</a>)</span> and <span class="citation" data-cites="Hill:2023">Hill et al. (<a href="#ref-Hill:2023" role="doc-biblioref">2023b</a>)</span> and is converted to phylo format for use with BioGeoBEARS <a href="https://github.com/mbutler808/Asterophryinae_phylogenetic_data/blob/main/BEAST2_analysis/beast_218_tree_asterophryinae.nex?raw=TRUE%22" class="uri">https://github.com/mbutler808/Asterophryinae_phylogenetic_data/blob/main/BEAST2_analysis/beast_218_tree_asterophryinae.nex?raw=TRUE"</a></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+inputs:
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>tree in phylo format “../data/biogeo.tree”<br>
+</li>
+<li>georegion metadata <a href="https://github.com/mbutler808/Asterophryinae_phylogenetic_data/blob/main/Table1.csv?raw=TRUE" class="uri">https://github.com/mbutler808/Asterophryinae_phylogenetic_data/blob/main/Table1.csv?raw=TRUE</a><br>
+</li>
+<li>statenames, codes, colors “../data/georegion_colors.csv”<br>
+</li>
+<li>ancestral state probabilities “../results/models/prob_pies_13.csv”</li>
+</ul>
+<section id="outputs" class="level4">
+<h4 class="anchored" data-anchor-id="outputs">outputs:</h4>
+<ul>
+<li>figure “../results/manuscript_tree_DEC.pdf”<br>
+</li>
+</ul>
+</section>
+</div>
+</div>
+<p>Load needed packages to run the DEC models.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Required Packages</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(ggtree)</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(treeio)</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a><span class="co"># x without y function:</span></span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a><span class="st">"%w/o%"</span> <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y) x[<span class="sc">!</span>x <span class="sc">%in%</span> y ]</span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a><span class="do">#################################################</span></span>
+<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Read and arrange inputs                                                       #</span></span>
+<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a><span class="do">#################################################</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="read-inputs" class="level2">
+<h2 class="anchored" data-anchor-id="read-inputs">Read inputs</h2>
+<p>We read the tree in and covert it to a dataframe <code>tree.data</code> using <code>treeio</code>.</p>
+<p>The metadata (tip label and terrane) are read into <code>dat</code>, and the terranes are edited to make nice names, filtered to drop any that are not in the tree, and finally only the labels and terrane is kept, dropping all of the uncessary fields.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="do">#################################################</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the tree</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Tree in phylo format is converted to a dataframe </span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>tree <span class="ot">&lt;-</span> <span class="fu">read.tree</span>(<span class="st">"../data/biogeo.tree"</span>)</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>tree.data <span class="ot">&lt;-</span> tree <span class="sc">%&gt;%</span> as_tibble <span class="sc">%&gt;%</span> as.data.frame</span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>istip <span class="ot">&lt;-</span> <span class="sc">!</span><span class="fu">is.na</span>(tree.data<span class="sc">$</span>label)</span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a><span class="do">#################################################</span></span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Load terrane data for tips</span></span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a><span class="co"># edits terrane names, subsets by tips in the tree</span></span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"https://github.com/mbutler808/Asterophryinae_phylogenetic_data/blob/main/Table1.csv?raw=TRUE"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a>         <span class="fu">select</span>(label, terrane, locality, site) <span class="sc">%&gt;%</span> </span>
+<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a>         <span class="fu">mutate</span>(<span class="at">terrane =</span> <span class="fu">ifelse</span>(terrane<span class="sc">==</span><span class="st">"dentrecasteaux"</span>, locality, terrane)) <span class="sc">%&gt;%</span>  </span>
+<span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a>         <span class="fu">mutate</span>(<span class="at">terrane =</span> <span class="fu">gsub</span>(<span class="st">"epct"</span>, <span class="st">"EPCT"</span>, terrane)) <span class="sc">%&gt;%</span> </span>
+<span id="cb41-17"><a href="#cb41-17" aria-hidden="true" tabindex="-1"></a>         <span class="fu">mutate</span>(<span class="at">terrane =</span> <span class="fu">gsub</span>(<span class="st">"accreted"</span>, <span class="st">"Accreted Terranes"</span>, terrane)) <span class="sc">%&gt;%</span> </span>
+<span id="cb41-18"><a href="#cb41-18" aria-hidden="true" tabindex="-1"></a>         <span class="fu">mutate</span>(<span class="at">terrane =</span> <span class="fu">gsub</span>(<span class="st">"fold"</span>, <span class="st">"Fold Belt"</span>, terrane)) <span class="sc">%&gt;%</span> </span>
+<span id="cb41-19"><a href="#cb41-19" aria-hidden="true" tabindex="-1"></a>         <span class="fu">mutate</span>(<span class="at">terrane =</span> <span class="fu">gsub</span>(<span class="st">"craton"</span>, <span class="st">"Australian Craton"</span>, terrane)) <span class="sc">%&gt;%</span></span>
+<span id="cb41-20"><a href="#cb41-20" aria-hidden="true" tabindex="-1"></a>         <span class="fu">mutate</span>(<span class="at">terrane =</span> <span class="fu">gsub</span>(<span class="st">"vogelkop"</span>, <span class="st">"Vogelkop Peninsula"</span>, terrane)) <span class="sc">%&gt;%</span></span>
+<span id="cb41-21"><a href="#cb41-21" aria-hidden="true" tabindex="-1"></a>         <span class="fu">mutate</span>(<span class="at">terrane =</span> <span class="fu">gsub</span>(<span class="st">"misima"</span>, <span class="st">"Misima Island"</span>, terrane)) <span class="sc">%&gt;%</span></span>
+<span id="cb41-22"><a href="#cb41-22" aria-hidden="true" tabindex="-1"></a>         <span class="fu">mutate</span>(<span class="at">terrane =</span> <span class="fu">gsub</span>(<span class="st">"sudest"</span>, <span class="st">"Sudest Island"</span>, terrane)) <span class="sc">%&gt;%</span></span>
+<span id="cb41-23"><a href="#cb41-23" aria-hidden="true" tabindex="-1"></a>         <span class="fu">mutate</span>(<span class="at">terrane =</span> <span class="fu">gsub</span>(<span class="st">"rossel"</span>, <span class="st">"Rossel Island"</span>, terrane)) <span class="sc">%&gt;%</span></span>
+<span id="cb41-24"><a href="#cb41-24" aria-hidden="true" tabindex="-1"></a>         <span class="fu">mutate</span>(<span class="at">terrane =</span> <span class="fu">gsub</span>(<span class="st">"woodlark"</span>, <span class="st">"Woodlark Island"</span>, terrane)) <span class="sc">%&gt;%</span></span>
+<span id="cb41-25"><a href="#cb41-25" aria-hidden="true" tabindex="-1"></a>         <span class="fu">mutate</span>(<span class="at">terrane =</span> <span class="fu">gsub</span>(<span class="st">"newbritain"</span>, <span class="st">"New Britain"</span>, terrane)) <span class="sc">%&gt;%</span></span>
+<span id="cb41-26"><a href="#cb41-26" aria-hidden="true" tabindex="-1"></a>         <span class="fu">mutate</span>(<span class="at">terrane =</span> <span class="fu">gsub</span>(<span class="st">"notpng"</span>, <span class="st">"Southeast Asia"</span>, terrane)) <span class="sc">%&gt;%</span></span>
+<span id="cb41-27"><a href="#cb41-27" aria-hidden="true" tabindex="-1"></a>         <span class="fu">filter</span>( label <span class="sc">%in%</span> <span class="fu">as_tibble</span>(tree.data)<span class="sc">$</span>label) <span class="sc">%&gt;%</span>         <span class="co"># drop any not in tree</span></span>
+<span id="cb41-28"><a href="#cb41-28" aria-hidden="true" tabindex="-1"></a>         <span class="fu">mutate</span>(<span class="at">labels =</span> <span class="fu">paste</span>(label, locality, site, <span class="at">sep=</span><span class="st">"-"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb41-29"><a href="#cb41-29" aria-hidden="true" tabindex="-1"></a>         <span class="fu">mutate</span>(<span class="at">labels =</span> <span class="fu">gsub</span>(<span class="st">"_"</span>, <span class="st">" "</span>, labels)) <span class="sc">%&gt;%</span></span>
+<span id="cb41-30"><a href="#cb41-30" aria-hidden="true" tabindex="-1"></a>         <span class="fu">select</span>(label, labels, terrane)  <span class="co"># keep only label, terrane</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="add-georegions-to-tree.data" class="level2">
+<h2 class="anchored" data-anchor-id="add-georegions-to-tree.data">Add georegions to tree.data</h2>
+<p>Merge the tree and metadata information together to get the terranes associated with the phylogeny.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="do">####################################################</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge tree.data with dat to add terranes to tip labels and nodes</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 218 tips</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>tree.data.tips <span class="ot">&lt;-</span> <span class="fu">full_join</span>(tree.data[istip,], dat, <span class="at">by =</span> <span class="st">"label"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>               as_tibble <span class="sc">%&gt;%</span> </span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>               as.data.frame <span class="sc">%&gt;%</span></span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>               <span class="fu">mutate</span>(<span class="at">label2 =</span> <span class="fu">gsub</span>(<span class="st">"[-_]"</span>, <span class="st">" "</span>, label)) <span class="sc">%&gt;%</span> <span class="co"># clean version</span></span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>               <span class="fu">select</span>(node, label, terrane, label2, labels)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="organize-georegions-names-colors" class="level2">
+<h2 class="anchored" data-anchor-id="organize-georegions-names-colors">Organize georegions names, colors</h2>
+<p>The user can specify the names and preferred colors in the dataframe <code>georegion_colors.csv</code>. This code reads in the information and makes index vectors for the names and their colors to be used in plotting. Adds an ambiguous category, and sorts aphabetically.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="do">####################################################</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Load state names, state codes, and colors</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>sa <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"../data/georegion_colors.csv"</span>)</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>oo <span class="ot">&lt;-</span> <span class="fu">order</span>(sa<span class="sc">$</span>states)  <span class="co"># sort by state names Accreted, Australian, etc.</span></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>sa <span class="ot">&lt;-</span> sa[oo,]  <span class="co"># includes ambiguous</span></span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>sn <span class="ot">&lt;-</span> sa[sa<span class="sc">$</span>states<span class="sc">!=</span><span class="st">"Ambiguous"</span>,]  <span class="co"># excludes ambiguous</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="node-probabilities-and-pies" class="level2">
+<h2 class="anchored" data-anchor-id="node-probabilities-and-pies">Node probabilities and pies</h2>
+<p>We assemble all of the information needed to annotate the tree into one dataframe. The georegion probabilities at the nodes were created by BioGeoBEARS and saved in <code>prob_pies_13.csv</code> above, with rows in node order. We read in this dataframe to merge with the tree dataframe so that we can plot the pies on the tree using <code>ggtree</code>. We also add the georegions and the colors to the tree dataframe so that we have all of the information organized by rows (nodes). All of this information is saved in the dataframe <code>prob</code>.</p>
+<p>To reduce clutter on the tree, we only plot pies if they indicate some ambiguity (no need to plot 100% pies). <code>showpie</code> is a flag for nodes with ambiguity - to plot pies if the maximum category has probability less than 95%.</p>
+<p>We use <code>treeio</code> <span class="citation" data-cites="Yu:2022">(<a href="#ref-Yu:2022" role="doc-biblioref">Yu 2022</a>)</span> to do the tree data manipulation, which expects the first column of the dataframe to contain the node number.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="do">####################################################</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Load state probabilities at nodes </span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>prob <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"../results/models/prob_pies_13.csv"</span>)[<span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>statenames <span class="ot">&lt;-</span> <span class="fu">names</span>(prob)</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>prob<span class="sc">$</span>node <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">rownames</span>(prob))</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>prob <span class="ot">&lt;-</span> prob <span class="sc">%&gt;%</span> <span class="fu">relocate</span>(node)</span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Reassign statenames in prob with full names for georegions</span></span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>oo <span class="ot">&lt;-</span> <span class="fu">sapply</span>( <span class="fu">names</span>(prob)[<span class="sc">-</span><span class="dv">1</span>], grep, sn<span class="sc">$</span>code ) <span class="co"># match codes, get order</span></span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(prob)[<span class="sc">-</span><span class="dv">1</span>] <span class="ot">&lt;-</span> sn<span class="sc">$</span>states[oo]  <span class="co"># assign full names in order</span></span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Add branchcol = ancestral terranes, used for painting the branches</span></span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Add showpie, plot pie if max prob is &lt; 95% </span></span>
+<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a>prob <span class="ot">&lt;-</span> prob <span class="sc">%&gt;%</span> <span class="co"># the prob of each state</span></span>
+<span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>( <span class="at">branchcol =</span> </span>
+<span id="cb44-16"><a href="#cb44-16" aria-hidden="true" tabindex="-1"></a>            <span class="fu">apply</span>( </span>
+<span id="cb44-17"><a href="#cb44-17" aria-hidden="true" tabindex="-1"></a>              prob[sn<span class="sc">$</span>states], </span>
+<span id="cb44-18"><a href="#cb44-18" aria-hidden="true" tabindex="-1"></a>              <span class="dv">1</span>, </span>
+<span id="cb44-19"><a href="#cb44-19" aria-hidden="true" tabindex="-1"></a>              <span class="cf">function</span>(x) {</span>
+<span id="cb44-20"><a href="#cb44-20" aria-hidden="true" tabindex="-1"></a>                <span class="fu">ifelse</span> ( </span>
+<span id="cb44-21"><a href="#cb44-21" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">max</span>(x) <span class="sc">&lt;</span> <span class="fl">0.5</span>,</span>
+<span id="cb44-22"><a href="#cb44-22" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"Ambiguous"</span>,  <span class="co"># if no region is &gt;50%, leave ambiguous </span></span>
+<span id="cb44-23"><a href="#cb44-23" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">names</span>(prob[sn<span class="sc">$</span>states])[x <span class="sc">==</span> <span class="fu">max</span>(x)]</span>
+<span id="cb44-24"><a href="#cb44-24" aria-hidden="true" tabindex="-1"></a>                )</span>
+<span id="cb44-25"><a href="#cb44-25" aria-hidden="true" tabindex="-1"></a>              }</span>
+<span id="cb44-26"><a href="#cb44-26" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb44-27"><a href="#cb44-27" aria-hidden="true" tabindex="-1"></a>        ) <span class="sc">%&gt;%</span> <span class="co"># for branch color</span></span>
+<span id="cb44-28"><a href="#cb44-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>( <span class="at">showpie =</span> </span>
+<span id="cb44-29"><a href="#cb44-29" aria-hidden="true" tabindex="-1"></a>            <span class="fu">apply</span>( </span>
+<span id="cb44-30"><a href="#cb44-30" aria-hidden="true" tabindex="-1"></a>              prob[sn<span class="sc">$</span>states],    <span class="co"># no need to plot pies for single states (&gt;95% prob)</span></span>
+<span id="cb44-31"><a href="#cb44-31" aria-hidden="true" tabindex="-1"></a>              <span class="dv">1</span>, </span>
+<span id="cb44-32"><a href="#cb44-32" aria-hidden="true" tabindex="-1"></a>              <span class="cf">function</span>(x) <span class="fu">max</span>(x)<span class="sc">&lt;</span>.<span class="dv">95</span></span>
+<span id="cb44-33"><a href="#cb44-33" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb44-34"><a href="#cb44-34" aria-hidden="true" tabindex="-1"></a>        ) <span class="co"># plot if prob&lt;.95               </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(prob)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  node Southeast Asia Vogelkop Peninsula Australian Craton Fold Belt
+1    1              0                  0                 0         0
+2    2              0                  0                 0         0
+3    3              0                  0                 0         1
+4    4              0                  0                 0         1
+5    5              0                  0                 0         0
+6    6              1                  0                 0         0
+  Accreted Terranes EPCT Normanby Island Fergusson Island Misima Island
+1                 1    0               0                0             0
+2                 1    0               0                0             0
+3                 0    0               0                0             0
+4                 0    0               0                0             0
+5                 1    0               0                0             0
+6                 0    0               0                0             0
+  Sudest Island Rossel Island Woodlark Island New Britain         branchcol
+1             0             0               0           0 Accreted Terranes
+2             0             0               0           0 Accreted Terranes
+3             0             0               0           0         Fold Belt
+4             0             0               0           0         Fold Belt
+5             0             0               0           0 Accreted Terranes
+6             0             0               0           0    Southeast Asia
+  showpie
+1   FALSE
+2   FALSE
+3   FALSE
+4   FALSE
+5   FALSE
+6   FALSE</code></pre>
+</div>
+</div>
+<p>Once we have the probabilities of each georegion associated with each node, it is easy to create pies for each node.</p>
+<p>We also merge the <code>prob</code> dataframe with the tree data by node. We now ahve all of the tree structure and metadata information in the <code>tree</code> and <code>td</code> objects. <code>pies</code> is a separate object to be used with the <code>geom_inset</code> to plot the pies on the tree.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="do">####################################################</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Create objects for use with ggtree plots                                    #</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="do">####################################################</span></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Generates the terrane pies for the nodes for use with ggplot</span></span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>pies <span class="ot">&lt;-</span> <span class="fu">nodepie</span>(</span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>            prob[<span class="sc">!</span>istip <span class="sc">&amp;</span> prob<span class="sc">$</span>showpie,], </span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">cols =</span> (sn<span class="sc">$</span>states),  </span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">alpha =</span> .<span class="dv">7</span></span>
+<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a>          )</span>
+<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a>pies <span class="ot">&lt;-</span> <span class="fu">lapply</span>(</span>
+<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a>            pies, </span>
+<span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a>            <span class="cf">function</span>(g) g<span class="sc">+</span><span class="fu">scale_fill_manual</span>(<span class="at">values =</span> sn<span class="sc">$</span>cols)</span>
+<span id="cb47-14"><a href="#cb47-14" aria-hidden="true" tabindex="-1"></a>          )</span>
+<span id="cb47-15"><a href="#cb47-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-16"><a href="#cb47-16" aria-hidden="true" tabindex="-1"></a>td <span class="ot">&lt;-</span> <span class="fu">full_join</span>(</span>
+<span id="cb47-17"><a href="#cb47-17" aria-hidden="true" tabindex="-1"></a>            prob, </span>
+<span id="cb47-18"><a href="#cb47-18" aria-hidden="true" tabindex="-1"></a>            tree.data.tips, </span>
+<span id="cb47-19"><a href="#cb47-19" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="st">"node"</span></span>
+<span id="cb47-20"><a href="#cb47-20" aria-hidden="true" tabindex="-1"></a>          ) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="plot-phylogeny-with-pies-using-ggtree" class="level2">
+<h2 class="anchored" data-anchor-id="plot-phylogeny-with-pies-using-ggtree">Plot phylogeny with pies using <code>ggtree</code></h2>
+<p><code>ggtree</code> <span class="citation" data-cites="Yu:2022">(<a href="#ref-Yu:2022" role="doc-biblioref">Yu 2022</a>)</span> extends <code>ggplot2</code> <span class="citation" data-cites="Wickham:2016">(<a href="#ref-Wickham:2016" role="doc-biblioref">Wickham 2016</a>)</span> for elegantly plotting phylogenetic trees with annotations.</p>
+<p>We use several geoms to create this plot, for tip labels, tip points, vertical lines, specifying custom colors with category names, axis breaks and labels, pies at the nodes, and customizing the legend. The best way to see what they do is to comment out a line and see what it changes (or build them in one by one).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="do">####################################################</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="do">##  Plot biogeographical evolution tree with terrane pies (Fig 4)</span></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a><span class="do">##</span></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="do">##  Use theme_get() to see theme options</span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a><span class="do">####################################################</span></span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggtree</span>(tree, <span class="fu">aes</span>(<span class="at">color=</span>branchcol), <span class="at">size=</span>.<span class="dv">5</span>) <span class="sc">%&lt;+%</span> td <span class="sc">+</span> </span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tiplab</span>( <span class="fu">aes</span>(<span class="at">label=</span>label2),  <span class="co"># tip labels</span></span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>               <span class="at">color =</span> <span class="st">"black"</span>, </span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>               <span class="at">size =</span> <span class="dv">1</span>, </span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a>               <span class="at">offset =</span> .<span class="dv">3</span>, </span>
+<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a>               <span class="at">fontface =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb48-13"><a href="#cb48-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tippoint</span>( <span class="fu">aes</span>(<span class="at">color =</span> terrane, <span class="at">x=</span>x<span class="fl">+.22</span>), <span class="co"># georegions on tip points</span></span>
+<span id="cb48-14"><a href="#cb48-14" aria-hidden="true" tabindex="-1"></a>                 <span class="at">shape=</span><span class="dv">15</span>, </span>
+<span id="cb48-15"><a href="#cb48-15" aria-hidden="true" tabindex="-1"></a>                 <span class="at">size =</span> <span class="dv">1</span>, </span>
+<span id="cb48-16"><a href="#cb48-16" aria-hidden="true" tabindex="-1"></a>                 <span class="at">show.legend =</span> F) <span class="sc">+</span></span>
+<span id="cb48-17"><a href="#cb48-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>( <span class="at">xintercept =</span> <span class="fu">c</span>(<span class="fl">4.71</span>, <span class="fl">9.71</span>, <span class="fl">14.71</span>), <span class="co"># vertical lines for time periods</span></span>
+<span id="cb48-18"><a href="#cb48-18" aria-hidden="true" tabindex="-1"></a>              <span class="at">linetype =</span> <span class="st">"dotted"</span>, </span>
+<span id="cb48-19"><a href="#cb48-19" aria-hidden="true" tabindex="-1"></a>              <span class="at">linewidth =</span> .<span class="dv">5</span>,</span>
+<span id="cb48-20"><a href="#cb48-20" aria-hidden="true" tabindex="-1"></a>              <span class="at">color =</span> <span class="st">"grey40"</span>) <span class="sc">+</span> </span>
+<span id="cb48-21"><a href="#cb48-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>( <span class="at">values =</span> sa<span class="sc">$</span>cols ) <span class="sc">+</span> <span class="co"># specify georegion colors </span></span>
+<span id="cb48-22"><a href="#cb48-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>( <span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">23</span>),   <span class="co"># x-axis tick placements</span></span>
+<span id="cb48-23"><a href="#cb48-23" aria-hidden="true" tabindex="-1"></a>                      <span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">4.71</span>, <span class="fl">9.71</span>, <span class="fl">14.71</span>, <span class="fl">19.71</span>), </span>
+<span id="cb48-24"><a href="#cb48-24" aria-hidden="true" tabindex="-1"></a>                      <span class="at">labels =</span> <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">15</span>, <span class="dv">10</span>, <span class="dv">5</span>, <span class="dv">0</span>)) <span class="sc">+</span></span>
+<span id="cb48-25"><a href="#cb48-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>( <span class="at">legend.position=</span><span class="fu">c</span>(<span class="fl">0.1</span>,.<span class="dv">88</span>), <span class="co"># customize the legend placement, text, title size</span></span>
+<span id="cb48-26"><a href="#cb48-26" aria-hidden="true" tabindex="-1"></a>         <span class="at">legend.text=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">8</span>),   <span class="co"># size of georegion categories</span></span>
+<span id="cb48-27"><a href="#cb48-27" aria-hidden="true" tabindex="-1"></a>         <span class="at">legend.title=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">12</span>), <span class="co"># title size</span></span>
+<span id="cb48-28"><a href="#cb48-28" aria-hidden="true" tabindex="-1"></a>         <span class="at">legend.key.size =</span> <span class="fu">unit</span>(.<span class="dv">8</span>, <span class="st">'lines'</span>), <span class="co"># key size</span></span>
+<span id="cb48-29"><a href="#cb48-29" aria-hidden="true" tabindex="-1"></a>         <span class="at">legend.key.width =</span> <span class="fu">unit</span>(.<span class="dv">25</span>, <span class="st">'cm'</span>),  <span class="co"># key width</span></span>
+<span id="cb48-30"><a href="#cb48-30" aria-hidden="true" tabindex="-1"></a>         <span class="at">legend.spacing.x =</span> <span class="fu">unit</span>(<span class="dv">2</span>, <span class="st">"mm"</span>),  <span class="co"># space between key and legend</span></span>
+<span id="cb48-31"><a href="#cb48-31" aria-hidden="true" tabindex="-1"></a>         <span class="at">legend.spacing.y =</span> <span class="fu">unit</span>(<span class="dv">0</span>, <span class="st">"mm"</span>),  <span class="co"># space between lines</span></span>
+<span id="cb48-32"><a href="#cb48-32" aria-hidden="true" tabindex="-1"></a>         <span class="at">legend.background=</span><span class="fu">element_blank</span>(), </span>
+<span id="cb48-33"><a href="#cb48-33" aria-hidden="true" tabindex="-1"></a>         <span class="at">axis.ticks.x =</span> <span class="fu">element_line</span>(<span class="at">linewidth =</span> .<span class="dv">4</span>), </span>
+<span id="cb48-34"><a href="#cb48-34" aria-hidden="true" tabindex="-1"></a>         <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
+<span id="cb48-35"><a href="#cb48-35" aria-hidden="true" tabindex="-1"></a>         <span class="at">axis.line.x =</span> <span class="fu">element_line</span>(<span class="at">linewidth =</span> .<span class="dv">4</span>),</span>
+<span id="cb48-36"><a href="#cb48-36" aria-hidden="true" tabindex="-1"></a>         <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb48-37"><a href="#cb48-37" aria-hidden="true" tabindex="-1"></a>         <span class="at">axis.ticks.length=</span><span class="fu">unit</span>(.<span class="dv">2</span>, <span class="st">"cm"</span>) </span>
+<span id="cb48-38"><a href="#cb48-38" aria-hidden="true" tabindex="-1"></a>       ) <span class="sc">+</span></span>
+<span id="cb48-39"><a href="#cb48-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>( <span class="at">color =</span> </span>
+<span id="cb48-40"><a href="#cb48-40" aria-hidden="true" tabindex="-1"></a>            <span class="fu">guide_legend</span>( <span class="at">override.aes=</span><span class="fu">list</span>(<span class="at">linewidth=</span><span class="dv">3</span>), <span class="co"># width of key line </span></span>
+<span id="cb48-41"><a href="#cb48-41" aria-hidden="true" tabindex="-1"></a>          <span class="at">title =</span> <span class="st">"Terrane"</span>)</span>
+<span id="cb48-42"><a href="#cb48-42" aria-hidden="true" tabindex="-1"></a>        ) <span class="sc">+</span> <span class="co"># customize legend line size  </span></span>
+<span id="cb48-43"><a href="#cb48-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Time (MYA)"</span>) <span class="sc">+</span></span>
+<span id="cb48-44"><a href="#cb48-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_inset</span>( pies, </span>
+<span id="cb48-45"><a href="#cb48-45" aria-hidden="true" tabindex="-1"></a>              <span class="at">width =</span> .<span class="dv">07</span>, </span>
+<span id="cb48-46"><a href="#cb48-46" aria-hidden="true" tabindex="-1"></a>              <span class="at">height =</span> .<span class="dv">07</span>, </span>
+<span id="cb48-47"><a href="#cb48-47" aria-hidden="true" tabindex="-1"></a>              <span class="at">hjust =</span> .<span class="dv">08</span>, </span>
+<span id="cb48-48"><a href="#cb48-48" aria-hidden="true" tabindex="-1"></a>              <span class="at">vjust =</span> .<span class="dv">4</span>)   <span class="co"># plot with multiple georegion probabilities</span></span>
+<span id="cb48-49"><a href="#cb48-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-50"><a href="#cb48-50" aria-hidden="true" tabindex="-1"></a><span class="fu">pdf</span>(<span class="at">file =</span> <span class="st">"../results/Fig4_DEC.pdf"</span>, <span class="at">height =</span> <span class="dv">10</span>, <span class="at">width =</span> <span class="dv">7</span>)</span>
+<span id="cb48-51"><a href="#cb48-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(p)</span>
+<span id="cb48-52"><a href="#cb48-52" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>quartz_off_screen 
+                2 </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>p</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="biogeog_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We also can plot the site names on the tree for more detail. That involves simply swaping out the label in <code>geom_tiplab</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>q <span class="ot">&lt;-</span> <span class="fu">ggtree</span>(tree, <span class="fu">aes</span>(<span class="at">color=</span>branchcol), <span class="at">size=</span>.<span class="dv">5</span>) <span class="sc">%&lt;+%</span> td <span class="sc">+</span> </span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tiplab</span>( <span class="fu">aes</span>(<span class="at">label=</span>labels),  <span class="co"># tip labels</span></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">color =</span> <span class="st">"black"</span>, </span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">size =</span> <span class="dv">1</span>, </span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">offset =</span> .<span class="dv">3</span>, </span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">fontface =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tippoint</span>( <span class="fu">aes</span>(<span class="at">color =</span> terrane, <span class="at">x=</span>x<span class="fl">+.22</span>), <span class="co"># georegions on tip points</span></span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>                 <span class="at">shape=</span><span class="dv">15</span>, </span>
+<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a>                 <span class="at">size =</span> <span class="dv">1</span>, </span>
+<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a>                 <span class="at">show.legend =</span> F) <span class="sc">+</span></span>
+<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>( <span class="at">xintercept =</span> <span class="fu">c</span>(<span class="fl">4.71</span>, <span class="fl">9.71</span>, <span class="fl">14.71</span>), <span class="co"># vertical lines for time periods</span></span>
+<span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a>              <span class="at">linetype =</span> <span class="st">"dotted"</span>, </span>
+<span id="cb51-13"><a href="#cb51-13" aria-hidden="true" tabindex="-1"></a>              <span class="at">linewidth =</span> .<span class="dv">5</span>,</span>
+<span id="cb51-14"><a href="#cb51-14" aria-hidden="true" tabindex="-1"></a>              <span class="at">color =</span> <span class="st">"grey40"</span>) <span class="sc">+</span> </span>
+<span id="cb51-15"><a href="#cb51-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>( <span class="at">values =</span> sa<span class="sc">$</span>cols ) <span class="sc">+</span> <span class="co"># specify georegion colors </span></span>
+<span id="cb51-16"><a href="#cb51-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>( <span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">27</span>),   <span class="co"># x-axis tick placements</span></span>
+<span id="cb51-17"><a href="#cb51-17" aria-hidden="true" tabindex="-1"></a>                      <span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">4.71</span>, <span class="fl">9.71</span>, <span class="fl">14.71</span>, <span class="fl">19.71</span>), </span>
+<span id="cb51-18"><a href="#cb51-18" aria-hidden="true" tabindex="-1"></a>                      <span class="at">labels =</span> <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">15</span>, <span class="dv">10</span>, <span class="dv">5</span>, <span class="dv">0</span>)) <span class="sc">+</span></span>
+<span id="cb51-19"><a href="#cb51-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>( <span class="at">legend.position=</span><span class="fu">c</span>(<span class="fl">0.1</span>,.<span class="dv">88</span>), <span class="co"># customize the legend placement, text, title size</span></span>
+<span id="cb51-20"><a href="#cb51-20" aria-hidden="true" tabindex="-1"></a>         <span class="at">legend.text=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">8</span>),   <span class="co"># size of georegion categories</span></span>
+<span id="cb51-21"><a href="#cb51-21" aria-hidden="true" tabindex="-1"></a>         <span class="at">legend.title=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">12</span>), <span class="co"># title size</span></span>
+<span id="cb51-22"><a href="#cb51-22" aria-hidden="true" tabindex="-1"></a>         <span class="at">legend.key.size =</span> <span class="fu">unit</span>(.<span class="dv">8</span>, <span class="st">'lines'</span>), <span class="co"># key size</span></span>
+<span id="cb51-23"><a href="#cb51-23" aria-hidden="true" tabindex="-1"></a>         <span class="at">legend.key.width =</span> <span class="fu">unit</span>(.<span class="dv">25</span>, <span class="st">'cm'</span>),  <span class="co"># key width</span></span>
+<span id="cb51-24"><a href="#cb51-24" aria-hidden="true" tabindex="-1"></a>         <span class="at">legend.spacing.x =</span> <span class="fu">unit</span>(<span class="dv">2</span>, <span class="st">"mm"</span>),  <span class="co"># space between key and legend</span></span>
+<span id="cb51-25"><a href="#cb51-25" aria-hidden="true" tabindex="-1"></a>         <span class="at">legend.spacing.y =</span> <span class="fu">unit</span>(<span class="dv">0</span>, <span class="st">"mm"</span>),  <span class="co"># space between lines</span></span>
+<span id="cb51-26"><a href="#cb51-26" aria-hidden="true" tabindex="-1"></a>         <span class="at">legend.background=</span><span class="fu">element_blank</span>(), </span>
+<span id="cb51-27"><a href="#cb51-27" aria-hidden="true" tabindex="-1"></a>         <span class="at">axis.ticks.x =</span> <span class="fu">element_line</span>(<span class="at">linewidth =</span> .<span class="dv">4</span>), </span>
+<span id="cb51-28"><a href="#cb51-28" aria-hidden="true" tabindex="-1"></a>         <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
+<span id="cb51-29"><a href="#cb51-29" aria-hidden="true" tabindex="-1"></a>         <span class="at">axis.line.x =</span> <span class="fu">element_line</span>(<span class="at">linewidth =</span> .<span class="dv">4</span>),</span>
+<span id="cb51-30"><a href="#cb51-30" aria-hidden="true" tabindex="-1"></a>         <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb51-31"><a href="#cb51-31" aria-hidden="true" tabindex="-1"></a>         <span class="at">axis.ticks.length=</span><span class="fu">unit</span>(.<span class="dv">2</span>, <span class="st">"cm"</span>) </span>
+<span id="cb51-32"><a href="#cb51-32" aria-hidden="true" tabindex="-1"></a>       ) <span class="sc">+</span></span>
+<span id="cb51-33"><a href="#cb51-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">color =</span> <span class="fu">guide_legend</span>( <span class="at">override.aes=</span><span class="fu">list</span>(<span class="at">linewidth=</span><span class="dv">3</span>), <span class="co"># width of key line </span></span>
+<span id="cb51-34"><a href="#cb51-34" aria-hidden="true" tabindex="-1"></a>                               <span class="at">title =</span> <span class="st">"Terrane"</span>)) <span class="sc">+</span> <span class="co"># customize legend line size  </span></span>
+<span id="cb51-35"><a href="#cb51-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Time (MYA)"</span>) <span class="sc">+</span></span>
+<span id="cb51-36"><a href="#cb51-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_inset</span>( pies, </span>
+<span id="cb51-37"><a href="#cb51-37" aria-hidden="true" tabindex="-1"></a>              <span class="at">width =</span> .<span class="dv">07</span>, </span>
+<span id="cb51-38"><a href="#cb51-38" aria-hidden="true" tabindex="-1"></a>              <span class="at">height =</span> .<span class="dv">07</span>, </span>
+<span id="cb51-39"><a href="#cb51-39" aria-hidden="true" tabindex="-1"></a>              <span class="at">hjust =</span> .<span class="dv">08</span>, </span>
+<span id="cb51-40"><a href="#cb51-40" aria-hidden="true" tabindex="-1"></a>              <span class="at">vjust =</span> .<span class="dv">4</span>)   <span class="co"># plot with multiple georegion probabilities</span></span>
+<span id="cb51-41"><a href="#cb51-41" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb51-42"><a href="#cb51-42" aria-hidden="true" tabindex="-1"></a><span class="fu">pdf</span>(<span class="at">file =</span> <span class="st">"../results/Fig4_DEC_sites.pdf"</span>, <span class="at">height =</span> <span class="dv">10</span>, <span class="at">width =</span> <span class="dv">7</span>)</span>
+<span id="cb51-43"><a href="#cb51-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(q)</span>
+<span id="cb51-44"><a href="#cb51-44" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>quartz_off_screen 
+                2 </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>q</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="biogeog_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="plot-range-transitions-through-time-genera_thru_time.r" class="level1">
+<h1>Plot range transitions through time <code>genera_thru_time.R</code></h1>
+<p>This block of code produces the data plot inset for figure 5. It plots the timing of each georegion transition by genus (time on Y axis, genus on X axis), organized by terrane. This figure is then placed into a composite figure made in Illustrator by hand with map elements and additional labels.</p>
+<p>Load needed packages to run the DEC models.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Required Packages</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggpubr)</span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(forcats)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="input-data" class="level2">
+<h2 class="anchored" data-anchor-id="input-data">Input data</h2>
+<p>This data was compiled by hand from the phylogeny and saved in the spreadsheet <code>genera_thru_time2.csv</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reads in the data frame and orders the transition states in plotting order</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>datall <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"../data/genera_thru_time2.csv"</span>)</span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>datall<span class="sc">$</span>Direction <span class="ot">&lt;-</span> <span class="fu">factor</span>( datall<span class="sc">$</span>Direction, </span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">c</span>( <span class="st">"E/A"</span>, <span class="st">"E/F"</span>, <span class="st">"E/R"</span>, <span class="st">"E/W"</span>, </span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"E/S"</span>, <span class="st">"E/M"</span>, <span class="st">"E/G"</span>, <span class="st">"E/N"</span>, </span>
+<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"E/B"</span>, <span class="st">"A/F"</span>, <span class="st">"A/C"</span>, <span class="st">"A/B"</span>, </span>
+<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"F/V"</span>, <span class="st">"F/A"</span>, <span class="st">"F/C"</span>, <span class="st">"F/E"</span>, </span>
+<span id="cb55-8"><a href="#cb55-8" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"V/C"</span>,<span class="st">"V/F"</span></span>
+<span id="cb55-9"><a href="#cb55-9" aria-hidden="true" tabindex="-1"></a>                                           )</span>
+<span id="cb55-10"><a href="#cb55-10" aria-hidden="true" tabindex="-1"></a>                                       )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We sort the data by time and by georegion to reveal the pattern of coincidence of multiple events by time and space.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sorts the groupings of transitions by time of dispersal events</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>temp <span class="ot">&lt;-</span> <span class="fu">reorder</span>(datall<span class="sc">$</span>Group, datall<span class="sc">$</span>Time)</span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>datall<span class="sc">$</span>Group <span class="ot">&lt;-</span> <span class="fu">factor</span>(datall<span class="sc">$</span>Group, <span class="fu">levels</span>(temp))</span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>datall<span class="sc">$</span>Genus_unique <span class="ot">&lt;-</span> datall<span class="sc">$</span>Genus</span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a>datall<span class="sc">$</span>Genus <span class="ot">&lt;-</span> <span class="fu">sub</span>(<span class="st">"[0-9.]+"</span>, <span class="st">""</span>, datall<span class="sc">$</span>Genus)</span>
+<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-7"><a href="#cb56-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Generates the plotting order for genera</span></span>
+<span id="cb56-8"><a href="#cb56-8" aria-hidden="true" tabindex="-1"></a>plotlab <span class="ot">&lt;-</span> datall<span class="sc">$</span>Genus[<span class="fu">seq</span>(<span class="dv">1</span>, <span class="fu">length</span>(datall<span class="sc">$</span>Genus), <span class="dv">3</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="plot-the-dispersals" class="level2">
+<h2 class="anchored" data-anchor-id="plot-the-dispersals">Plot the dispersals</h2>
+<p>Generates the plot of dispersal events using <code>ggplot2</code>.</p>
+<p>Note: The unique factor order had to be manually converted to clade names to represent the custom plotting order based on terrane specific dispersal events on the x-axis</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generates the plot of dispersal events</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Note: The unique factor order had to be manually converted to clade names to </span></span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a><span class="co">#       represent the custom plotting order based on terrane specific dispersal</span></span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a><span class="co">#       events on the x-axis </span></span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a>fig <span class="ot">&lt;-</span> datall <span class="sc">%&gt;%</span></span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>( <span class="fu">aes</span>( <span class="at">x =</span> <span class="fu">reorder</span>( Group, <span class="fu">desc</span>(Group) ), <span class="at">y =</span> Time ) ) <span class="sc">+</span> </span>
+<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>( <span class="at">yintercept =</span> <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">15</span>, <span class="dv">10</span>, <span class="dv">3</span>), <span class="at">linetype =</span> <span class="st">"dotted"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb57-8"><a href="#cb57-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>( <span class="fu">aes</span>(<span class="at">group =</span> Group, <span class="at">colour =</span> Direction ), <span class="at">linewidth =</span> .<span class="dv">8</span>, <span class="at">lineend =</span> <span class="st">"round"</span>) <span class="sc">+</span></span>
+<span id="cb57-9"><a href="#cb57-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>( <span class="fu">aes</span>( <span class="at">colour =</span> Direction ), <span class="at">data=</span><span class="fu">subset</span>( datall[ <span class="fu">seq</span>( <span class="dv">3</span>, <span class="fu">nrow</span>(datall), <span class="dv">3</span>), ] ), <span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span> </span>
+<span id="cb57-10"><a href="#cb57-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>(<span class="at">labels =</span> <span class="fu">c</span>(</span>
+<span id="cb57-11"><a href="#cb57-11" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"1"</span> <span class="ot">=</span> <span class="st">"Oreophryne A"</span>,</span>
+<span id="cb57-12"><a href="#cb57-12" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"2"</span> <span class="ot">=</span> <span class="st">"Oreophryne A"</span>,</span>
+<span id="cb57-13"><a href="#cb57-13" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"3"</span> <span class="ot">=</span> <span class="st">"Oreophryne A"</span>,</span>
+<span id="cb57-14"><a href="#cb57-14" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"4"</span> <span class="ot">=</span> <span class="st">"Cophixalus"</span>,</span>
+<span id="cb57-15"><a href="#cb57-15" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"5"</span> <span class="ot">=</span> <span class="st">"Cophixalus"</span>,</span>
+<span id="cb57-16"><a href="#cb57-16" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"6"</span> <span class="ot">=</span> <span class="st">"Choerophryne"</span>,</span>
+<span id="cb57-17"><a href="#cb57-17" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"7"</span> <span class="ot">=</span> <span class="st">"Choerophryne"</span>,</span>
+<span id="cb57-18"><a href="#cb57-18" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"8"</span> <span class="ot">=</span> <span class="st">"Austrochaperina B"</span>,</span>
+<span id="cb57-19"><a href="#cb57-19" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"9"</span> <span class="ot">=</span> <span class="st">"Austrochaperina B"</span>,</span>
+<span id="cb57-20"><a href="#cb57-20" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"10"</span> <span class="ot">=</span> <span class="st">"Austrochaperina A"</span>,</span>
+<span id="cb57-21"><a href="#cb57-21" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"11"</span> <span class="ot">=</span> <span class="st">"Liophryne"</span>,</span>
+<span id="cb57-22"><a href="#cb57-22" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"12"</span> <span class="ot">=</span> <span class="st">"Sphenophryne"</span>,</span>
+<span id="cb57-23"><a href="#cb57-23" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"13"</span> <span class="ot">=</span> <span class="st">"Asterophrys"</span>,</span>
+<span id="cb57-24"><a href="#cb57-24" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"14"</span> <span class="ot">=</span> <span class="st">"Asterophrys"</span>,</span>
+<span id="cb57-25"><a href="#cb57-25" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"15"</span> <span class="ot">=</span> <span class="st">"Asterophrys"</span>,</span>
+<span id="cb57-26"><a href="#cb57-26" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"16"</span> <span class="ot">=</span> <span class="st">"Asterophrys"</span>,</span>
+<span id="cb57-27"><a href="#cb57-27" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"17"</span> <span class="ot">=</span> <span class="st">"Asterophrys"</span>,</span>
+<span id="cb57-28"><a href="#cb57-28" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"18"</span> <span class="ot">=</span> <span class="st">"Xenorhina"</span>,</span>
+<span id="cb57-29"><a href="#cb57-29" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"19"</span> <span class="ot">=</span> <span class="st">"Xenorhina"</span>,</span>
+<span id="cb57-30"><a href="#cb57-30" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"20"</span> <span class="ot">=</span> <span class="st">"Xenorhina"</span>,</span>
+<span id="cb57-31"><a href="#cb57-31" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"21"</span> <span class="ot">=</span> <span class="st">"Xenorhina"</span>,</span>
+<span id="cb57-32"><a href="#cb57-32" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"22"</span> <span class="ot">=</span> <span class="st">"Xenorhina"</span>,</span>
+<span id="cb57-33"><a href="#cb57-33" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"23"</span> <span class="ot">=</span> <span class="st">"Callulops"</span>,</span>
+<span id="cb57-34"><a href="#cb57-34" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"24"</span> <span class="ot">=</span> <span class="st">"Callulops"</span>,</span>
+<span id="cb57-35"><a href="#cb57-35" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"25"</span> <span class="ot">=</span> <span class="st">"Mantophryne"</span>,</span>
+<span id="cb57-36"><a href="#cb57-36" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"26"</span> <span class="ot">=</span> <span class="st">"Hylophorbus"</span>,</span>
+<span id="cb57-37"><a href="#cb57-37" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"27"</span> <span class="ot">=</span> <span class="st">"Hylophorbus"</span>,</span>
+<span id="cb57-38"><a href="#cb57-38" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"28"</span> <span class="ot">=</span> <span class="st">"Hylophorbus"</span>,</span>
+<span id="cb57-39"><a href="#cb57-39" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"29"</span> <span class="ot">=</span> <span class="st">"Hylophorbus"</span>,</span>
+<span id="cb57-40"><a href="#cb57-40" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"30"</span> <span class="ot">=</span> <span class="st">"Oreophryne A"</span>,</span>
+<span id="cb57-41"><a href="#cb57-41" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"31"</span> <span class="ot">=</span> <span class="st">"Oreophryne A"</span>,</span>
+<span id="cb57-42"><a href="#cb57-42" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"32"</span> <span class="ot">=</span> <span class="st">"Oreophryne A"</span>,</span>
+<span id="cb57-43"><a href="#cb57-43" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"33"</span> <span class="ot">=</span> <span class="st">"Oreophryne A"</span>,</span>
+<span id="cb57-44"><a href="#cb57-44" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"34"</span> <span class="ot">=</span> <span class="st">"Paedophryne"</span>,</span>
+<span id="cb57-45"><a href="#cb57-45" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"35"</span> <span class="ot">=</span> <span class="st">"Cophixalus"</span>,</span>
+<span id="cb57-46"><a href="#cb57-46" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"36"</span> <span class="ot">=</span> <span class="st">"Cophixalus"</span>,</span>
+<span id="cb57-47"><a href="#cb57-47" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"37"</span> <span class="ot">=</span> <span class="st">"Cophixalus"</span>,</span>
+<span id="cb57-48"><a href="#cb57-48" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"38"</span> <span class="ot">=</span> <span class="st">"Cophixalus"</span>,</span>
+<span id="cb57-49"><a href="#cb57-49" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"39"</span> <span class="ot">=</span> <span class="st">"Cophixalus"</span>,</span>
+<span id="cb57-50"><a href="#cb57-50" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"40"</span> <span class="ot">=</span> <span class="st">"Cophixalus"</span>,</span>
+<span id="cb57-51"><a href="#cb57-51" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"41"</span> <span class="ot">=</span> <span class="st">"Oreophryne B"</span>,</span>
+<span id="cb57-52"><a href="#cb57-52" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"42"</span> <span class="ot">=</span> <span class="st">"Oreophryne B"</span>,</span>
+<span id="cb57-53"><a href="#cb57-53" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"43"</span> <span class="ot">=</span> <span class="st">"Oreophryne B"</span>,</span>
+<span id="cb57-54"><a href="#cb57-54" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"44"</span> <span class="ot">=</span> <span class="st">"Oreophryne B"</span>,</span>
+<span id="cb57-55"><a href="#cb57-55" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"45"</span> <span class="ot">=</span> <span class="st">"Oreophryne B"</span>,</span>
+<span id="cb57-56"><a href="#cb57-56" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"46"</span> <span class="ot">=</span> <span class="st">"Oreophryne B"</span>,</span>
+<span id="cb57-57"><a href="#cb57-57" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"47"</span> <span class="ot">=</span> <span class="st">"Austrochaperina C"</span>,</span>
+<span id="cb57-58"><a href="#cb57-58" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"48"</span> <span class="ot">=</span> <span class="st">"Barygenys"</span>,</span>
+<span id="cb57-59"><a href="#cb57-59" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"49"</span> <span class="ot">=</span> <span class="st">"Barygenys"</span>,</span>
+<span id="cb57-60"><a href="#cb57-60" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"50"</span> <span class="ot">=</span> <span class="st">"Barygenys"</span>,</span>
+<span id="cb57-61"><a href="#cb57-61" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"51"</span> <span class="ot">=</span> <span class="st">"Austrochaperina A"</span>,</span>
+<span id="cb57-62"><a href="#cb57-62" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"52"</span> <span class="ot">=</span> <span class="st">"Austrochaperina A"</span>,</span>
+<span id="cb57-63"><a href="#cb57-63" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"53"</span> <span class="ot">=</span> <span class="st">"Copiula"</span>,</span>
+<span id="cb57-64"><a href="#cb57-64" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"54"</span> <span class="ot">=</span> <span class="st">"Copiula"</span>,</span>
+<span id="cb57-65"><a href="#cb57-65" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"55"</span> <span class="ot">=</span> <span class="st">"Copiula"</span>,</span>
+<span id="cb57-66"><a href="#cb57-66" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"56"</span> <span class="ot">=</span> <span class="st">"Copiula"</span>,</span>
+<span id="cb57-67"><a href="#cb57-67" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"57"</span> <span class="ot">=</span> <span class="st">"Liophryne"</span>,</span>
+<span id="cb57-68"><a href="#cb57-68" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"58"</span> <span class="ot">=</span> <span class="st">"Genyophryne"</span>,</span>
+<span id="cb57-69"><a href="#cb57-69" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"59"</span> <span class="ot">=</span> <span class="st">"Genyophryne"</span>,</span>
+<span id="cb57-70"><a href="#cb57-70" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"60"</span> <span class="ot">=</span> <span class="st">"Callulops"</span>,</span>
+<span id="cb57-71"><a href="#cb57-71" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"61"</span> <span class="ot">=</span> <span class="st">"Callulops"</span>,</span>
+<span id="cb57-72"><a href="#cb57-72" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"62"</span> <span class="ot">=</span> <span class="st">"Mantophryne"</span>,</span>
+<span id="cb57-73"><a href="#cb57-73" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"63"</span> <span class="ot">=</span> <span class="st">"Mantophryne"</span>,</span>
+<span id="cb57-74"><a href="#cb57-74" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"64"</span> <span class="ot">=</span> <span class="st">"Mantophryne"</span>,</span>
+<span id="cb57-75"><a href="#cb57-75" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"65"</span> <span class="ot">=</span> <span class="st">"Mantophryne"</span>,</span>
+<span id="cb57-76"><a href="#cb57-76" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"66"</span> <span class="ot">=</span> <span class="st">"Hylophorbus"</span>,</span>
+<span id="cb57-77"><a href="#cb57-77" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"67"</span> <span class="ot">=</span> <span class="st">"Hylophorbus"</span>,</span>
+<span id="cb57-78"><a href="#cb57-78" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"68"</span> <span class="ot">=</span> <span class="st">"Hylophorbus"</span>,</span>
+<span id="cb57-79"><a href="#cb57-79" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"69"</span> <span class="ot">=</span> <span class="st">"Hylophorbus"</span>,</span>
+<span id="cb57-80"><a href="#cb57-80" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"70"</span> <span class="ot">=</span> <span class="st">"Hylophorbus"</span></span>
+<span id="cb57-81"><a href="#cb57-81" aria-hidden="true" tabindex="-1"></a>                   )</span>
+<span id="cb57-82"><a href="#cb57-82" aria-hidden="true" tabindex="-1"></a>             ) <span class="sc">+</span></span>
+<span id="cb57-83"><a href="#cb57-83" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>( <span class="at">axis.line.x =</span> <span class="fu">element_line</span>(), </span>
+<span id="cb57-84"><a href="#cb57-84" aria-hidden="true" tabindex="-1"></a>              <span class="at">axis.line.y.left=</span><span class="fu">element_line</span>(),              </span>
+<span id="cb57-85"><a href="#cb57-85" aria-hidden="true" tabindex="-1"></a>              <span class="at">panel.background=</span><span class="fu">element_blank</span>(),</span>
+<span id="cb57-86"><a href="#cb57-86" aria-hidden="true" tabindex="-1"></a>              <span class="at">panel.border=</span><span class="fu">element_blank</span>(),</span>
+<span id="cb57-87"><a href="#cb57-87" aria-hidden="true" tabindex="-1"></a>              <span class="at">panel.grid.major=</span><span class="fu">element_blank</span>(), </span>
+<span id="cb57-88"><a href="#cb57-88" aria-hidden="true" tabindex="-1"></a>              <span class="at">panel.grid.minor=</span><span class="fu">element_blank</span>(),</span>
+<span id="cb57-89"><a href="#cb57-89" aria-hidden="true" tabindex="-1"></a>              <span class="at">plot.background=</span><span class="fu">element_blank</span>(), </span>
+<span id="cb57-90"><a href="#cb57-90" aria-hidden="true" tabindex="-1"></a>              <span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(), </span>
+<span id="cb57-91"><a href="#cb57-91" aria-hidden="true" tabindex="-1"></a>              <span class="at">legend.position=</span><span class="st">"none"</span>, </span>
+<span id="cb57-92"><a href="#cb57-92" aria-hidden="true" tabindex="-1"></a>              <span class="at">axis.text.x =</span> <span class="fu">element_text</span>( <span class="at">angle =</span> <span class="dv">90</span>, <span class="at">size =</span> <span class="dv">9</span> ), </span>
+<span id="cb57-93"><a href="#cb57-93" aria-hidden="true" tabindex="-1"></a>              <span class="at">panel.spacing.x =</span> <span class="fu">unit</span>( .<span class="dv">25</span>, <span class="st">"lines"</span>), </span>
+<span id="cb57-94"><a href="#cb57-94" aria-hidden="true" tabindex="-1"></a>              <span class="at">strip.background.x =</span> <span class="fu">element_rect</span>( <span class="at">linewidth =</span> .<span class="dv">5</span>, <span class="at">color =</span> <span class="st">"black"</span> ), </span>
+<span id="cb57-95"><a href="#cb57-95" aria-hidden="true" tabindex="-1"></a>              <span class="at">axis.text.y =</span> <span class="fu">element_text</span>( <span class="at">size =</span> <span class="dv">25</span> ), </span>
+<span id="cb57-96"><a href="#cb57-96" aria-hidden="true" tabindex="-1"></a>              <span class="at">axis.title.y =</span> <span class="fu">element_text</span>( <span class="at">size =</span> <span class="dv">25</span> ), </span>
+<span id="cb57-97"><a href="#cb57-97" aria-hidden="true" tabindex="-1"></a>              <span class="at">axis.text.x.bottom =</span> <span class="fu">element_text</span>( <span class="at">vjust =</span> .<span class="dv">5</span>, <span class="at">hjust =</span> <span class="dv">1</span> )</span>
+<span id="cb57-98"><a href="#cb57-98" aria-hidden="true" tabindex="-1"></a>            ) <span class="sc">+</span> </span>
+<span id="cb57-99"><a href="#cb57-99" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>( <span class="at">values=</span><span class="fu">c</span>( <span class="st">"orange"</span>, <span class="st">"cyan"</span>, <span class="st">"violet"</span>, <span class="st">"maroon"</span>, </span>
+<span id="cb57-100"><a href="#cb57-100" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"magenta"</span>, <span class="st">"purple"</span>, <span class="st">"#F89880"</span>, <span class="st">"pink"</span>,</span>
+<span id="cb57-101"><a href="#cb57-101" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"red"</span>, <span class="st">"cyan"</span>, <span class="st">"blue"</span>, <span class="st">"red"</span>, </span>
+<span id="cb57-102"><a href="#cb57-102" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"yellow"</span>, <span class="st">"orange"</span>, <span class="st">"blue"</span>, <span class="st">"green"</span>, </span>
+<span id="cb57-103"><a href="#cb57-103" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"blue"</span>, <span class="st">"cyan"</span></span>
+<span id="cb57-104"><a href="#cb57-104" aria-hidden="true" tabindex="-1"></a>                               )</span>
+<span id="cb57-105"><a href="#cb57-105" aria-hidden="true" tabindex="-1"></a>                    ) <span class="sc">+</span></span>
+<span id="cb57-106"><a href="#cb57-106" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>( <span class="at">y =</span> (<span class="st">"Time (Ma)"</span>) ) <span class="sc">+</span></span>
+<span id="cb57-107"><a href="#cb57-107" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>( <span class="at">cols =</span> <span class="fu">vars</span>( Direction ), </span>
+<span id="cb57-108"><a href="#cb57-108" aria-hidden="true" tabindex="-1"></a>                    <span class="at">scales =</span> <span class="st">"free"</span>, </span>
+<span id="cb57-109"><a href="#cb57-109" aria-hidden="true" tabindex="-1"></a>                    <span class="at">space =</span> <span class="st">"free"</span></span>
+<span id="cb57-110"><a href="#cb57-110" aria-hidden="true" tabindex="-1"></a>                  ) <span class="sc">+</span></span>
+<span id="cb57-111"><a href="#cb57-111" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>( <span class="at">strip.text =</span> </span>
+<span id="cb57-112"><a href="#cb57-112" aria-hidden="true" tabindex="-1"></a>            <span class="fu">element_text</span>( <span class="at">color =</span> <span class="cn">NA</span>, </span>
+<span id="cb57-113"><a href="#cb57-113" aria-hidden="true" tabindex="-1"></a>                          <span class="at">margin =</span> <span class="fu">margin</span>( .<span class="dv">5</span>,<span class="dv">0</span>,.<span class="dv">5</span>,<span class="dv">0</span>, <span class="st">"cm"</span> )</span>
+<span id="cb57-114"><a href="#cb57-114" aria-hidden="true" tabindex="-1"></a>                        )</span>
+<span id="cb57-115"><a href="#cb57-115" aria-hidden="true" tabindex="-1"></a>       )</span>
+<span id="cb57-116"><a href="#cb57-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-117"><a href="#cb57-117" aria-hidden="true" tabindex="-1"></a><span class="co"># Writes the plot to pdf</span></span>
+<span id="cb57-118"><a href="#cb57-118" aria-hidden="true" tabindex="-1"></a><span class="fu">pdf</span>( <span class="at">file =</span> <span class="st">"../results/Fig5_plot.pdf"</span>, <span class="at">height =</span> <span class="dv">16</span>, <span class="at">width =</span> <span class="dv">12</span>)</span>
+<span id="cb57-119"><a href="#cb57-119" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(fig)</span>
+<span id="cb57-120"><a href="#cb57-120" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>quartz_off_screen 
+                2 </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>fig</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="biogeog_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+
+</section>
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-line-spacing="2" role="list">
+<div id="ref-Hill:2022" class="csl-entry" role="listitem">
+Hill, E. C., C. J. Fraser, D. F. Gao, M. J. Jarman, E. R. Henry, B. Iova, A. Allison, and M. A. Butler. 2022. <a href="https://doi.org/10.1016/j.ympev.2022.107618">Resolving the deep phylogeny: Implications for early adaptive radiation, cryptic, and present-day ecological diversity of papuan microhylid frogs</a>. <span>Molecular Phylogenetics and Evolution</span> 177:107618.
+</div>
+<div id="ref-Hill:2023a" class="csl-entry" role="listitem">
+Hill, E. C., D. F. Gao, D. A. Polhemus, C. J. Fraser, B. Iova, A. Allison, and M. A. Butler. 2023a. Testing geology with biology: Plate tectonics and the diversification of microhylid frogs in the papuan region. Integrative Organismal Biology.
+</div>
+<div id="ref-Hill:2023" class="csl-entry" role="listitem">
+Hill, E. C., M. J. Jarman, C. J. Fraser, D. F. Gao, E. R. Henry, A. R. Fisher, B. Iova, A. Allison, and M. A. Butler. 2023b. <a href="https://doi.org/10.1016/j.dib.2023.108987">Molecular and phylogenetic datasets for the asterophryinae frogs of new guinea with additional data on lifestyle, geography, and elevation</a>. Data in Brief 47:108987.
+</div>
+<div id="ref-Matzke:2013" class="csl-entry" role="listitem">
+Matzke, N. J. 2013. <a href="http://CRAN.R-project.org/package=BioGeoBEARS">BioGeoBEARS: BioGeography with bayesian (and likelihood) evolutionary analysis in r scripts</a>. University of California, Berkeley, Berkeley, CA.
+</div>
+<div id="ref-Wickham:2016" class="csl-entry" role="listitem">
+Wickham, H. 2016. <a href="https://ggplot2.tidyverse.org">ggplot2: Elegant graphics for data analysis</a>. Springer-Verlag New York.
+</div>
+<div id="ref-Yu:2022" class="csl-entry" role="listitem">
+Yu, G. 2022. Data integration, manipulation and visualization of phylogenetic treess. 1st edition. Chapman; Hall/<span>CRC</span>.
+</div>
+</div></section></div></main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

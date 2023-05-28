@@ -1,0 +1,14 @@
+id,hypothesis,dispersal_multipliers,time_periods,areas_allowed,df
+a,slow_and_steady,slow_and_steady,,,2
+b,current_connectivity,current_connectivity,,,2
+c,louisiade_archipelago,louisiade_archipelago,,,2
+d,woodlark_with_louisiade,woodlark_with_louisiade,,,2
+e,owen_stanleys,owen_stanleys,,,2
+f,historical_owen_stanleys,historical_owen_stanleys,,,2
+g,offshore_with_epct,offshore_with_epct,,,2
+h,offshore_with_nearest_mainland,offshore_with_nearest_mainland,,,2
+i,offshore_with_accreted,offshore_with_accreted,,,2
+j,mobile_belt,mobile_belt,mobile_belt,mobile_belt,2
+k,recent_emergence,recent_emergence,recent_emergence,recent_emergence,2
+l,distance,distance,,,2
+DEC,unconstrained_DEC,,,,2

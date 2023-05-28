@@ -1,0 +1,15 @@
+code,states,cols,hex
+a,Accreted Terranes,orange,#FFA500
+b,New Britain,red,#FF0000
+c,Australian Craton,blue,#0000FF
+e,EPCT,green,#00FF00
+f,Fold Belt,cyan,#00FFFF
+g,Fergusson Island,#F89880,#F89880
+m,Misima Island,purple,#A020F0
+n,Southeast Asia,black,#000000
+r,Rossel Island,violet,#EE82EE
+s,Sudest Island,magenta,#FF00FF
+v,Vogelkop Peninsula,yellow,#FFFF00
+w,Woodlark Island,maroon,#B03060
+y,Normanby Island,pink,#FFC0CB
+x,Ambiguous,grey,#BEBEBE

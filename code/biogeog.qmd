@@ -1,0 +1,376 @@
+---
+title: "Analyses for *Testing geology with biology: Plate tectonics and the diversification of microhylid frogs in the Papuan region*"
+author: "Marguerite Butler and Ethan Hill"
+date: "`r Sys.Date()`"
+format:
+  html:
+    toc: true
+    number-sections: false
+    highlight-style: github 
+bibliography: ../manuscript/references.bib
+csl: ../manuscript/evolution.csl
+---
+
+
+This Quarto document provides a walk through of the analyses used in Hill [-@Hill:2023a], which explored biogeographic explanations for the hyper-diversity of the asterophryne frogs of the Papuan region. This study analyzed a phylogenetic tree with 218 tips found throughout the Papuan region in 13 georegions [tree and data previously published in @Hill:2022; @Hill:2023]. We fit DEC models of geographical range evolution along a phylogeny using the `BioGeoBEARS` package. These models estimate the rates of dispersal, extinction, and cladogenesis, and estimate ancestral georegions at each node of the tree. Because we use a time-calibrated phylogeny, we can reconstruct the timing of range shifts between georegions along the phylogeny and test hypotheses of geology involving plate tectonic movements. 
+
+
+This script is written to fit DEC models with all of the inputs saved to the `data` folder. Most of the primary data is pulled in from the permanent [GitHub repository](https://github.com/mbutler808/Asterophryinae_phylogenetic_data#asterophryinae_phylogenetic_data-) linked to 
+<https://doi.org/10.5281/zenodo.7063168>.
+
+The functions are written generically, and could be reused to test other hypotheses or datasets by changing the input files below with minor code editing of the script. For example, because all of our species occupy single georegion ranges, we do not use DEC-J, and we limit the maxmimum number of simultaneous ranges to two (the minimum number). These are options that can be changed.  
+
+The geological hypotheses we test are specified in the setup of the following data matrices and files. Please see Nick Matzkeʻs [BioGeoBEARS wiki](http://phylo.wikidot.com/biogeobears) and @Matzke:2013 for explanation of these inputs, and @Hill:2023a for explanation of the geological  hypotheses. 
+
+| File in `data`| Contents |
+|----|----|
+|`geobins.txt` |tip labels (matching the tree) and the present-day geographical region of the taxa|  
+|`biogeo.tree` |the phylogenetic tree - disable reading from the GitHub repo if you want to substitute the tree|
+|`dispersal_matrices\hyp.txt`| dispersal matrices associated with the hypotheses|
+|`areas_allowed/hyp.txt`| areas allowed matrices. Files should be named according to the name of the hypothesis|
+|`time_periods/hyp.txt`| time periods associated with time-stratified hypotheses, these require associated areas allowed matrices|
+|`hypotheses.csv`| a master data frame that associates hypotheses names, hypotheses short codes, and the names of their associated dispersal, time_periods, and areas_allowed files (if any) |
+|`georegion_colors.csv`|custom colors, codes, and pretty names associated with the georegions|
+|`sensitivity_trees/tree_X.nwk`|a sample of phylogenetic trees to run sensitivity analyses for phylogenetic uncertainty - replace with your own best trees if you want to do this on your own data|
+
+# Setup and Reproducibility
+
+The analysis can be reproduced by running or sourcing the three R scripts below (`biogeog_functions.R` is sourced in `biogeog.R`), or by rerunning this single quarto document, which is written to pull the following R scripts into memory so that the code chunks can be used in the document below.  
+
+```{r}
+knitr::read_chunk('biogeog.R')
+knitr::read_chunk('biogeog_functions.R')
+knitr::read_chunk('tree_plotting_DEC.R')
+knitr::read_chunk('genera_thru_time.R')
+```
+
+# Biogeography analyses `biogeog.R`
+
+Load needed packages to run the DEC models. 
+
+```{r, packagesDEC}
+#| message: FALSE
+#| warning: FALSE
+```
+
+Load custom functions into memory. 
+
+```{r, functions}
+```
+
+### The functions include:  
+- `biogeo_obj()`: Creates the input object for running BioGeoBEARS models  
+- `hypothesis_list()` : Assembles a list of hypotheses to run through BioGeoBEARS models conveniently.  
+- `"%w/o%"` : Returns the vector elements of X without Y.  
+- `logLik.bgb()` : Returns the log likelihood from BioGeoBEARS model output.  
+- `AIC.bgb()` Returns the AIC value from BioGeoBEARS model output.    
+- `model_fit_table()` : Creates a model fit table from a list of BioGeoBEARS model outputs.  
+
+
+More details on these functions are explained at the end of this document. 
+
+### Gather the inputs for BioGeoBEARS
+
+The ARGUMENTS to `BioGeoBEARS` are file names with paths to the file locations, as follows:
+
+| Name in current script | BioGeoBEARS name | Explanation | 
+| - | - | - | 
+| treefile | trfn | tree in nexus format |
+| geo | geogfn | geographic data, here in PHYLIP format |
+| disperal | dispersal_multipliers_fn | dispersal  multiplier matrix |
+| timeperiods | timesfn | time stratification matrix |
+| areasallowed | areas_allowed_fn | areas allowed matrix |
+| hdat | | The `hypotheses.csv` file contains an organizational dataframe to keep track of all of the parts for each hypothesis: names and codes for our custom hypotheses, along with the associated dispersal, timeperiods, and areas allowed matrices, if any |
+: BioGeoBEARS inputs with brief explanations. {#tbl-bgbinputs} 
+
+In our repository, these files are in the `data` folder.
+
+### Load the basic model inputs
+
+To see the structure of BioGeoBEARS model input (see @tbl-bgbinputs), open the text files in the `data` folder.  
+
+Note that we are accessing a published phylogeny from a GitHub repository, but in order to run BioGeoBEARS, we write the file to our `data` directory. If you want to run it on a different tree, you can edit the code `treefile` to point to your own tree file. 
+
+```{r, inputs}
+```
+
+Because we have a lot of models of different types, it is convenient to organize the hypotheses into groups by whether or not they are unconstrained, time-stratified, or have dispersal matrices (including time-stratified), because they have different  inputs. Each of these vectors contains the hypothesis codes for their group. 
+
+```{r, model_groups}
+```
+```{r}
+hyp_dm
+hyp_ts 
+hyp_un 
+```
+
+Create model inputs as vectors.
+
+```{r, model_input_vectors}
+```
+```{r}
+dispersal 
+timeperiods 
+areasallowed
+```
+
+## Create BioGeoBEARS input objects
+
+Now we are ready to run the `BioGeoBEARS` functions to create input objects. These are stored as a named list, named by the hypothesis. 
+
+```{r, create_BioGeoBEARS_objects}
+#| message: FALSE
+#| warning: FALSE
+```
+
+## Run the models
+
+This code will run all of the models in the list. It takes about 20 minutes on my laptop. If you want to just run one model, follow the commented out version instead. 
+
+```{r, run_models}
+#| eval: false
+```
+```{r}
+#| echo: false
+fit <- readRDS("../results/models/hyp_fits.rds")
+```
+
+## Save model output
+
+Gather the scores for each model and put them into a table `scores`. It is sorted by AIC score, so the first one is the best model. 
+
+```{r, model_stats}
+```
+
+Finally, save the model outputs into the `results/models` folder for use later. `.rds` files are in R format, whereas `.csv` is a text format readable by spreadsheet programs. 
+
+```{r, save_modelfits}
+```
+
+## Prepare ancestral states probabilities for plots
+
+Consolidate probabilities for pie charts showing range transitions. BioGeoBEARS creates multi-area probabilities by default, and the fewest possible areas allowed is two. Since our frogs are low-disperal species that occupy only one georegion (i.e., they are single-area species), we consolidate these dual-area probabilities to single areas by summing half of each dual-area probability with their single area probabilities. 
+
+```{r, pie_probs}
+```
+
+::: {.callout-tip}
+## EXPLANATION:
+The trick is to find the label rows with each terrane letter, say:
+
+> n <- grep("n", column_labels)
+
+Then use that index to add the partial probabilities together. The first occurance of the state name is the single-area probability. To that we add the partial probability of each double-letter area 
+
+We split the dual area probability 50-50 between the two areas:
+
+> pies[2] <- probs[n[1]] + rowSums(0.5*probs[n[-1]])   # n (south east asia)
+
+The first statename correspponds to the second column of the probs matrix, as the first column is the null probability
+:::
+
+## Plot BioGeoBEARS pie charts on the phylogeny
+
+This produces the default `BioGeoBEARS` plot output. 
+
+```{r, plot_pies}
+```
+
+## Sensitivity analysis
+
+Warning! This will take over 30 hours to complete. To run this, set this flag to `true` in `biogeog.R` (near the top of the script) and source the script. 
+
+```{r, sensitivity}
+```
+
+It runs the complete analysis 100 times, once on each of the sample of 100 best trees stored in `data`. 
+
+```{r, Sensitivity_Analysis}
+```
+
+# Biogeography functions `biogeog_functions.R`
+
+These are the custom functions used in `biogeog.R` and the above. 
+
+In these functions, we follow the BioGeoBEARS naming convention when using their functions, for our sanity. (Even though these are really long names!)
+
+- `trfn` = tree in nexus format  
+- `geogfn` = geographic data, in PHYLIP format   
+- `dispersal_multipliers_fn` =  dispersal multiplier matrix   
+- `timesfn` = time stratification matrix   
+- `areas_allowed_fn` = areas allowed matrix   
+
+## `biogeo_obj()`
+
+This function is a wrapper for the BioGeoBEARS function `define_BioGeoBEARS_run` to create input objects for a given hypothesis. It returns the assembled BioGeoBEARS input object. 
+
+If it is a time-stratified model or a model with dispersal multipliers, it loads the appropriate inputs. All the use has to do is set up the model inputs correctly in the `data` directory, with the entries of `hypothesis.csv` corresponding to file names in the `data` folder. 
+
+We chose `max_range_size`=2 and commonly recommended options to make it run. 
+
+```{r, make_input}
+```
+
+## `hypothesis_list()`
+
+This function builds the list of hypotheses. Since we have 13 hypotheses, it is convenient to assemble them into a list and then use Rʻs list utilities to run and process all of the models. 
+
+We include the three indicator vectors for dispersal multipler models `hyp_dm`, time-stratified models `hyp_ts`, and unconstrained models `hyp_un` so that the function can assemble the appropriate parts. 
+
+```{r, build_hypotheses}
+```
+
+## Accessory functions
+
+Accessor functions for grabbing the __log-likelihood__ and __AIC__ values from the BioGeoBEARS model fit objects. 
+
+The input (x) is a BioGeoBEARS model fit. 
+
+```{r, modelfit_accessors}
+```
+
+This is a very convenient function for comparing two vectors and returning the members of X that are not in Y:
+
+```{r, without}
+```
+
+## `model_fit_table()`
+
+This function collects the model fit statistics for all of the hypotheses: the log likelihoods and AIC statistics, computes the delta AICs, sorts the hypotheses by fit, and returns a score table. 
+
+```{r, modelfit_table}
+```
+
+# Plot Biogeographical Evolution Tree `tree_plotting_DEC.R`
+
+This code produces Figure 4 in the manuscript using `ggtree` [@Yu:2022]. 
+
+Tree branches are painted by majority rule of the ancestral terrane. Pies represent probabilities of ancestral states at nodes
+
+Model outputs produced in `biogeog.R`. 
+The tree and geographical data comes from @Hill:2022 and @Hill:2023 and is converted to phylo format for use with BioGeoBEARS
+<https://github.com/mbutler808/Asterophryinae_phylogenetic_data/blob/main/BEAST2_analysis/beast_218_tree_asterophryinae.nex?raw=TRUE">
+
+::: {.callout-note}
+## inputs:
+- tree in phylo format "../data/biogeo.tree"   
+- georegion metadata <https://github.com/mbutler808/Asterophryinae_phylogenetic_data/blob/main/Table1.csv?raw=TRUE>   
+- statenames, codes, colors "../data/georegion_colors.csv"  
+- ancestral state probabilities "../results/models/prob_pies_13.csv"   
+
+#### outputs:
+- figure  "../results/manuscript_tree_DEC.pdf"  
+:::
+
+
+Load needed packages to run the DEC models. 
+
+```{r, packages_treeplot}
+#| message: FALSE
+#| warning: FALSE
+```
+
+## Read inputs
+
+We read the tree in and covert it to a dataframe `tree.data` using `treeio`.  
+
+The metadata (tip label and terrane) are read into `dat`, and the terranes are edited to make nice names, filtered to drop any that are not in the tree, and finally only the labels and terrane is kept, dropping all of the uncessary fields. 
+
+```{r, tree_inputs}
+#| message: FALSE
+#| warning: FALSE
+```
+
+## Add georegions to tree.data
+
+Merge the tree and metadata information together to get the terranes associated with the phylogeny. 
+
+```{r, merge_tree_data}
+```
+
+## Organize georegions names, colors 
+
+The user can specify the names and preferred colors in the dataframe `georegion_colors.csv`.  This code reads in the information and makes index vectors for the names and their colors to be used in plotting. Adds an ambiguous category, and sorts aphabetically. 
+
+```{r, names_colors}
+```
+
+## Node probabilities and pies   
+
+We assemble all of the information needed to annotate the tree into one dataframe. The georegion probabilities at the nodes were created by BioGeoBEARS and saved in `prob_pies_13.csv` above, with rows in node order. We read in this dataframe to merge with the tree dataframe so that we can plot the pies on the tree using `ggtree`. We also add the georegions and the colors to the tree dataframe so that we have all of the information organized by rows (nodes). All of this information is saved in the dataframe `prob`.
+
+To reduce clutter on the tree, we only plot pies if they indicate some ambiguity (no need to plot 100% pies). `showpie` is a flag for nodes with ambiguity - to plot pies if the maximum category has probability less than 95%.
+
+We use `treeio` [@Yu:2022] to do the tree data manipulation, which expects the first column of the dataframe to contain the node number.
+
+```{r, node_probs}
+```
+```{r}
+head(prob)
+```
+
+Once we have the probabilities of each georegion associated with each node, it is easy to create pies for each node.  
+
+We also merge the `prob` dataframe with the tree data by node. We now ahve all of the tree structure and metadata information in the `tree` and `td` objects. `pies` is a separate object to be used with the `geom_inset` to plot the pies on the tree.
+
+```{r, node_pies}
+```
+
+## Plot phylogeny with pies using `ggtree`
+
+`ggtree` [@Yu:2022] extends `ggplot2` [@Wickham:2016] for elegantly plotting phylogenetic trees with annotations. 
+
+We use several geoms to create this plot, for tip labels, tip points, vertical lines, specifying custom colors with category names, axis breaks and labels, pies at the nodes, and customizing the legend.  The best way to see what they do is to comment out a line and see what it changes (or build them in one by one). 
+
+```{r, plot_ggtree}
+```
+```{r}
+p
+```
+
+We also can plot the site names on the tree for more detail. That involves simply swaping out the label in `geom_tiplab`. 
+
+```{r, plot_ggtree_sites}
+```
+```{r}
+q
+```
+
+# Plot range transitions through time `genera_thru_time.R`
+
+This block of code produces the data plot inset for figure 5. It plots the timing of each georegion transition by genus (time on Y axis, genus on X axis), organized by terrane. This figure is then placed into a composite figure made in Illustrator by hand with map elements and additional labels. 
+
+Load needed packages to run the DEC models. 
+
+```{r, packages_genusplot}
+#| message: FALSE
+#| warning: FALSE
+```
+
+## Input data
+
+This data was compiled by hand from the phylogeny and saved in the spreadsheet `genera_thru_time2.csv`. 
+
+
+```{r, read_plot_data}
+head(datall)
+```
+
+We sort the data by time and by georegion to reveal the pattern of coincidence of multiple events by time and space.
+
+```{r, sort_plot_data} 
+```
+
+## Plot the dispersals
+
+Generates the plot of dispersal events using `ggplot2`. 
+
+Note: The unique factor order had to be manually converted to clade names to represent the custom plotting order based on terrane specific dispersal events on the x-axis 
+
+```{r, plot_dispersals}
+```
+```{r}
+fig
+```
+
+
