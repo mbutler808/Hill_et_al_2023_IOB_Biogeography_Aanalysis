@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Marguerite Butler and Ethan Hill">
-<meta name="dcterms.date" content="2023-05-27">
+<meta name="dcterms.date" content="2023-06-01">
 
 <title>Analyses for Testing geology with biology: Plate tectonics and the diversification of microhylid frogs in the Papuan region</title>
 <style>
@@ -157,7 +157,7 @@ div.csl-indent {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">May 27, 2023</p>
+      <p class="date">June 1, 2023</p>
     </div>
   </div>
   
@@ -576,7 +576,7 @@ EXPLANATION:
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The trick is to find the label rows with each terrane letter, say:</p>
+<p>The trick is to find the label rows with each georegion letter, say “n”:</p>
 <blockquote class="blockquote">
 <p>n &lt;- grep(“n”, column_labels)</p>
 </blockquote>
@@ -600,7 +600,7 @@ EXPLANATION:
 <span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="co"># scores &lt;- read.csv("../../results/models/modelfit.csv")</span></span>
 <span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="fu">pdf</span>(<span class="at">file =</span> <span class="st">"../results/h_DEC2.pdf"</span>, <span class="at">height =</span> <span class="dv">45</span>, <span class="at">width =</span> <span class="dv">20</span>)</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="fu">pdf</span>(<span class="at">file =</span> <span class="st">"../results/h_DEC.pdf"</span>, <span class="at">height =</span> <span class="dv">45</span>, <span class="at">width =</span> <span class="dv">20</span>)</span>
 <span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_BioGeoBEARS_results</span>( best_fit,</span>
 <span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>                            <span class="at">plotwhat =</span> <span class="st">"pie"</span>,</span>
 <span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>                            <span class="at">splitcex=</span>.<span class="dv">4</span>,</span>
@@ -655,31 +655,44 @@ EXPLANATION:
 <span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="do">##############################################</span></span>
 <span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>( run_sensitivity_analysis ) { <span class="co"># Will take 30 hours of run time</span></span>
-<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Top 100 trees from BEAST analysis </span></span>
-<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># All other inputs remain the same </span></span>
-<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>  trees <span class="ot">&lt;-</span> <span class="fu">list.files</span>(</span>
-<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"../data/sensitivity_trees"</span>, </span>
-<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>                     <span class="at">full.names =</span> <span class="cn">TRUE</span></span>
-<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>                   ) <span class="co"># vector of tree files</span></span>
-<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Save the scores from best models, observed + 100 trees</span></span>
-<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># First row is the observed result</span></span>
-<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a>  best_models <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"../results/models/modelfit.csv"</span>)[<span class="dv">1</span>,]</span>
-<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a>  best_models <span class="ot">&lt;-</span> <span class="fu">cbind</span>(best_models, <span class="st">"tree"</span><span class="ot">=</span>tree)   <span class="co"># Add tree path</span></span>
-<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a>                   </span>
-<span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a>  <span class="do">### Interate over trees: assemble hypotheses, run models, collect scores</span></span>
-<span id="cb34-21"><a href="#cb34-21" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (tree <span class="cf">in</span> trees) {</span>
-<span id="cb34-22"><a href="#cb34-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-23"><a href="#cb34-23" aria-hidden="true" tabindex="-1"></a>    h <span class="ot">&lt;-</span> <span class="fu">hypothesis_list</span>( hyp_dm, hyp_ts, hyp_un, tree, geo, </span>
-<span id="cb34-24"><a href="#cb34-24" aria-hidden="true" tabindex="-1"></a>                          dispersal, timeperiods, areasallowed)</span>
-<span id="cb34-25"><a href="#cb34-25" aria-hidden="true" tabindex="-1"></a>    fit <span class="ot">&lt;-</span> <span class="fu">lapply</span>( h, bears_optim_run )</span>
-<span id="cb34-26"><a href="#cb34-26" aria-hidden="true" tabindex="-1"></a>    scores <span class="ot">&lt;-</span> <span class="fu">cbind</span>( <span class="fu">model_fit_table</span>(fit), <span class="st">"tree"</span><span class="ot">=</span>tree )</span>
-<span id="cb34-27"><a href="#cb34-27" aria-hidden="true" tabindex="-1"></a>    best_models <span class="ot">&lt;-</span> <span class="fu">rbind</span>( best_models, scores[<span class="dv">1</span>,] ) </span>
-<span id="cb34-28"><a href="#cb34-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-29"><a href="#cb34-29" aria-hidden="true" tabindex="-1"></a>  }  </span>
-<span id="cb34-30"><a href="#cb34-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write.csv</span>(best_models, <span class="st">"../results/models/modelfit_sensitivity.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb34-31"><a href="#cb34-31" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Save the scores from best models, observed + 100 trees</span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># First row is the observed result</span></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>  best_models <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"../results/models/modelfittable.csv"</span>)[<span class="dv">1</span>,]</span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>  best_models <span class="ot">&lt;-</span> <span class="fu">cbind</span>(best_models, <span class="st">"tree"</span><span class="ot">=</span>treefile)   <span class="co"># Add tree path</span></span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write.table</span>( best_models, </span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"../results/models/modelfit_sensitivity.csv"</span>, </span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>                     <span class="at">quote=</span><span class="cn">FALSE</span>,</span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>                     <span class="at">sep=</span><span class="st">","</span>, </span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a>                     <span class="at">row.names=</span><span class="cn">FALSE</span></span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a>                  ) </span>
+<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Top 100 trees from BEAST analysis </span></span>
+<span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># All other inputs remain the same </span></span>
+<span id="cb34-21"><a href="#cb34-21" aria-hidden="true" tabindex="-1"></a>  trees <span class="ot">&lt;-</span> <span class="fu">list.files</span>(</span>
+<span id="cb34-22"><a href="#cb34-22" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"../data/sensitivity_trees"</span>, </span>
+<span id="cb34-23"><a href="#cb34-23" aria-hidden="true" tabindex="-1"></a>                     <span class="at">full.names =</span> <span class="cn">TRUE</span></span>
+<span id="cb34-24"><a href="#cb34-24" aria-hidden="true" tabindex="-1"></a>                   ) <span class="co"># vector of tree files</span></span>
+<span id="cb34-25"><a href="#cb34-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-26"><a href="#cb34-26" aria-hidden="true" tabindex="-1"></a>  <span class="do">### Interate over trees: assemble hypotheses, run models, print scores</span></span>
+<span id="cb34-27"><a href="#cb34-27" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (tree <span class="cf">in</span> trees) {</span>
+<span id="cb34-28"><a href="#cb34-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Analyzing tree:"</span>, tree))</span>
+<span id="cb34-29"><a href="#cb34-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-30"><a href="#cb34-30" aria-hidden="true" tabindex="-1"></a>    h <span class="ot">&lt;-</span> <span class="fu">hypothesis_list</span>( hyp_dm, hyp_ts, hyp_un, tree, geo, </span>
+<span id="cb34-31"><a href="#cb34-31" aria-hidden="true" tabindex="-1"></a>                          dispersal, timeperiods, areasallowed)</span>
+<span id="cb34-32"><a href="#cb34-32" aria-hidden="true" tabindex="-1"></a>    fit <span class="ot">&lt;-</span> <span class="fu">lapply</span>( h, bears_optim_run )</span>
+<span id="cb34-33"><a href="#cb34-33" aria-hidden="true" tabindex="-1"></a>    scores <span class="ot">&lt;-</span> <span class="fu">cbind</span>( <span class="fu">model_fit_table</span>(fit), <span class="st">"tree"</span><span class="ot">=</span>tree )</span>
+<span id="cb34-34"><a href="#cb34-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-35"><a href="#cb34-35" aria-hidden="true" tabindex="-1"></a>    <span class="fu">write.table</span>( scores[<span class="dv">1</span>,], </span>
+<span id="cb34-36"><a href="#cb34-36" aria-hidden="true" tabindex="-1"></a>                          <span class="st">"../results/models/modelfit_sensitivity.csv"</span>, </span>
+<span id="cb34-37"><a href="#cb34-37" aria-hidden="true" tabindex="-1"></a>                          <span class="at">append=</span><span class="cn">TRUE</span>, </span>
+<span id="cb34-38"><a href="#cb34-38" aria-hidden="true" tabindex="-1"></a>                          <span class="at">quote=</span><span class="cn">FALSE</span>,</span>
+<span id="cb34-39"><a href="#cb34-39" aria-hidden="true" tabindex="-1"></a>                          <span class="at">sep=</span><span class="st">","</span>, </span>
+<span id="cb34-40"><a href="#cb34-40" aria-hidden="true" tabindex="-1"></a>                          <span class="at">row.names=</span><span class="cn">FALSE</span>, </span>
+<span id="cb34-41"><a href="#cb34-41" aria-hidden="true" tabindex="-1"></a>                          <span class="at">col.names=</span><span class="cn">FALSE</span></span>
+<span id="cb34-42"><a href="#cb34-42" aria-hidden="true" tabindex="-1"></a>                         ) </span>
+<span id="cb34-43"><a href="#cb34-43" aria-hidden="true" tabindex="-1"></a>  }  </span>
+<span id="cb34-44"><a href="#cb34-44" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
@@ -970,7 +983,7 @@ inputs:
 <section id="node-probabilities-and-pies" class="level2">
 <h2 class="anchored" data-anchor-id="node-probabilities-and-pies">Node probabilities and pies</h2>
 <p>We assemble all of the information needed to annotate the tree into one dataframe. The georegion probabilities at the nodes were created by BioGeoBEARS and saved in <code>prob_pies_13.csv</code> above, with rows in node order. We read in this dataframe to merge with the tree dataframe so that we can plot the pies on the tree using <code>ggtree</code>. We also add the georegions and the colors to the tree dataframe so that we have all of the information organized by rows (nodes). All of this information is saved in the dataframe <code>prob</code>.</p>
-<p>To reduce clutter on the tree, we only plot pies if they indicate some ambiguity (no need to plot 100% pies). <code>showpie</code> is a flag for nodes with ambiguity - to plot pies if the maximum category has probability less than 95%.</p>
+<p>To reduce clutter on the tree, we only plot pies if they indicate some ambiguity (no need to plot 100% pies). <code>showpie</code> is a flag for nodes with ambiguity - to plot pies if the alternative georegions that have prob &gt; 5%.</p>
 <p>We use <code>treeio</code> <span class="citation" data-cites="Yu:2022">(<a href="#ref-Yu:2022" role="doc-biblioref">Yu 2022</a>)</span> to do the tree data manipulation, which expects the first column of the dataframe to contain the node number.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="do">####################################################</span></span>
@@ -985,7 +998,7 @@ inputs:
 <span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(prob)[<span class="sc">-</span><span class="dv">1</span>] <span class="ot">&lt;-</span> sn<span class="sc">$</span>states[oo]  <span class="co"># assign full names in order</span></span>
 <span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Add branchcol = ancestral terranes, used for painting the branches</span></span>
-<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Add showpie, plot pie if max prob is &lt; 95% </span></span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Add showpie, plot pie if there are alternate georegions that have prob &gt; 5% </span></span>
 <span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a>prob <span class="ot">&lt;-</span> prob <span class="sc">%&gt;%</span> <span class="co"># the prob of each state</span></span>
 <span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>( <span class="at">branchcol =</span> </span>
 <span id="cb44-16"><a href="#cb44-16" aria-hidden="true" tabindex="-1"></a>            <span class="fu">apply</span>( </span>
@@ -1042,7 +1055,7 @@ inputs:
 </div>
 </div>
 <p>Once we have the probabilities of each georegion associated with each node, it is easy to create pies for each node.</p>
-<p>We also merge the <code>prob</code> dataframe with the tree data by node. We now ahve all of the tree structure and metadata information in the <code>tree</code> and <code>td</code> objects. <code>pies</code> is a separate object to be used with the <code>geom_inset</code> to plot the pies on the tree.</p>
+<p>We also merge the <code>prob</code> dataframe with the tree data by node. We now have all of the tree structure and metadata information in the <code>tree</code> and <code>td</code> objects. <code>pies</code> is a separate object to be used with the <code>geom_inset</code> to plot the pies on the tree.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="do">####################################################</span></span>
 <span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Create objects for use with ggtree plots                                    #</span></span>
@@ -1069,7 +1082,8 @@ inputs:
 <section id="plot-phylogeny-with-pies-using-ggtree" class="level2">
 <h2 class="anchored" data-anchor-id="plot-phylogeny-with-pies-using-ggtree">Plot phylogeny with pies using <code>ggtree</code></h2>
 <p><code>ggtree</code> <span class="citation" data-cites="Yu:2022">(<a href="#ref-Yu:2022" role="doc-biblioref">Yu 2022</a>)</span> extends <code>ggplot2</code> <span class="citation" data-cites="Wickham:2016">(<a href="#ref-Wickham:2016" role="doc-biblioref">Wickham 2016</a>)</span> for elegantly plotting phylogenetic trees with annotations.</p>
-<p>We use several geoms to create this plot, for tip labels, tip points, vertical lines, specifying custom colors with category names, axis breaks and labels, pies at the nodes, and customizing the legend. The best way to see what they do is to comment out a line and see what it changes (or build them in one by one).</p>
+<p>We use several geoms to create this plot, for tip labels, tip points, vertical lines, specifying custom colors with category names, axis breaks and labels, pies at the nodes, and customizing the legend. We create the base tree plot without the tip labels so that we can switch labels easily in the next code chunk.</p>
+<p>The best way to see what they do is to comment out a line and see what it changes (or build them in one by one).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="do">####################################################</span></span>
 <span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="do">##  Plot biogeographical evolution tree with terrane pies (Fig 4)</span></span>
@@ -1078,115 +1092,83 @@ inputs:
 <span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a><span class="do">####################################################</span></span>
 <span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggtree</span>(tree, <span class="fu">aes</span>(<span class="at">color=</span>branchcol), <span class="at">size=</span>.<span class="dv">5</span>) <span class="sc">%&lt;+%</span> td <span class="sc">+</span> </span>
-<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tiplab</span>( <span class="fu">aes</span>(<span class="at">label=</span>label2),  <span class="co"># tip labels</span></span>
-<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>               <span class="at">color =</span> <span class="st">"black"</span>, </span>
-<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>               <span class="at">size =</span> <span class="dv">1</span>, </span>
-<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a>               <span class="at">offset =</span> .<span class="dv">3</span>, </span>
-<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a>               <span class="at">fontface =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb48-13"><a href="#cb48-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tippoint</span>( <span class="fu">aes</span>(<span class="at">color =</span> terrane, <span class="at">x=</span>x<span class="fl">+.22</span>), <span class="co"># georegions on tip points</span></span>
-<span id="cb48-14"><a href="#cb48-14" aria-hidden="true" tabindex="-1"></a>                 <span class="at">shape=</span><span class="dv">15</span>, </span>
-<span id="cb48-15"><a href="#cb48-15" aria-hidden="true" tabindex="-1"></a>                 <span class="at">size =</span> <span class="dv">1</span>, </span>
-<span id="cb48-16"><a href="#cb48-16" aria-hidden="true" tabindex="-1"></a>                 <span class="at">show.legend =</span> F) <span class="sc">+</span></span>
-<span id="cb48-17"><a href="#cb48-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>( <span class="at">xintercept =</span> <span class="fu">c</span>(<span class="fl">4.71</span>, <span class="fl">9.71</span>, <span class="fl">14.71</span>), <span class="co"># vertical lines for time periods</span></span>
-<span id="cb48-18"><a href="#cb48-18" aria-hidden="true" tabindex="-1"></a>              <span class="at">linetype =</span> <span class="st">"dotted"</span>, </span>
-<span id="cb48-19"><a href="#cb48-19" aria-hidden="true" tabindex="-1"></a>              <span class="at">linewidth =</span> .<span class="dv">5</span>,</span>
-<span id="cb48-20"><a href="#cb48-20" aria-hidden="true" tabindex="-1"></a>              <span class="at">color =</span> <span class="st">"grey40"</span>) <span class="sc">+</span> </span>
-<span id="cb48-21"><a href="#cb48-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>( <span class="at">values =</span> sa<span class="sc">$</span>cols ) <span class="sc">+</span> <span class="co"># specify georegion colors </span></span>
-<span id="cb48-22"><a href="#cb48-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>( <span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">23</span>),   <span class="co"># x-axis tick placements</span></span>
-<span id="cb48-23"><a href="#cb48-23" aria-hidden="true" tabindex="-1"></a>                      <span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">4.71</span>, <span class="fl">9.71</span>, <span class="fl">14.71</span>, <span class="fl">19.71</span>), </span>
-<span id="cb48-24"><a href="#cb48-24" aria-hidden="true" tabindex="-1"></a>                      <span class="at">labels =</span> <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">15</span>, <span class="dv">10</span>, <span class="dv">5</span>, <span class="dv">0</span>)) <span class="sc">+</span></span>
-<span id="cb48-25"><a href="#cb48-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>( <span class="at">legend.position=</span><span class="fu">c</span>(<span class="fl">0.1</span>,.<span class="dv">88</span>), <span class="co"># customize the legend placement, text, title size</span></span>
-<span id="cb48-26"><a href="#cb48-26" aria-hidden="true" tabindex="-1"></a>         <span class="at">legend.text=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">8</span>),   <span class="co"># size of georegion categories</span></span>
-<span id="cb48-27"><a href="#cb48-27" aria-hidden="true" tabindex="-1"></a>         <span class="at">legend.title=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">12</span>), <span class="co"># title size</span></span>
-<span id="cb48-28"><a href="#cb48-28" aria-hidden="true" tabindex="-1"></a>         <span class="at">legend.key.size =</span> <span class="fu">unit</span>(.<span class="dv">8</span>, <span class="st">'lines'</span>), <span class="co"># key size</span></span>
-<span id="cb48-29"><a href="#cb48-29" aria-hidden="true" tabindex="-1"></a>         <span class="at">legend.key.width =</span> <span class="fu">unit</span>(.<span class="dv">25</span>, <span class="st">'cm'</span>),  <span class="co"># key width</span></span>
-<span id="cb48-30"><a href="#cb48-30" aria-hidden="true" tabindex="-1"></a>         <span class="at">legend.spacing.x =</span> <span class="fu">unit</span>(<span class="dv">2</span>, <span class="st">"mm"</span>),  <span class="co"># space between key and legend</span></span>
-<span id="cb48-31"><a href="#cb48-31" aria-hidden="true" tabindex="-1"></a>         <span class="at">legend.spacing.y =</span> <span class="fu">unit</span>(<span class="dv">0</span>, <span class="st">"mm"</span>),  <span class="co"># space between lines</span></span>
-<span id="cb48-32"><a href="#cb48-32" aria-hidden="true" tabindex="-1"></a>         <span class="at">legend.background=</span><span class="fu">element_blank</span>(), </span>
-<span id="cb48-33"><a href="#cb48-33" aria-hidden="true" tabindex="-1"></a>         <span class="at">axis.ticks.x =</span> <span class="fu">element_line</span>(<span class="at">linewidth =</span> .<span class="dv">4</span>), </span>
-<span id="cb48-34"><a href="#cb48-34" aria-hidden="true" tabindex="-1"></a>         <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
-<span id="cb48-35"><a href="#cb48-35" aria-hidden="true" tabindex="-1"></a>         <span class="at">axis.line.x =</span> <span class="fu">element_line</span>(<span class="at">linewidth =</span> .<span class="dv">4</span>),</span>
-<span id="cb48-36"><a href="#cb48-36" aria-hidden="true" tabindex="-1"></a>         <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
-<span id="cb48-37"><a href="#cb48-37" aria-hidden="true" tabindex="-1"></a>         <span class="at">axis.ticks.length=</span><span class="fu">unit</span>(.<span class="dv">2</span>, <span class="st">"cm"</span>) </span>
-<span id="cb48-38"><a href="#cb48-38" aria-hidden="true" tabindex="-1"></a>       ) <span class="sc">+</span></span>
-<span id="cb48-39"><a href="#cb48-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>( <span class="at">color =</span> </span>
-<span id="cb48-40"><a href="#cb48-40" aria-hidden="true" tabindex="-1"></a>            <span class="fu">guide_legend</span>( <span class="at">override.aes=</span><span class="fu">list</span>(<span class="at">linewidth=</span><span class="dv">3</span>), <span class="co"># width of key line </span></span>
-<span id="cb48-41"><a href="#cb48-41" aria-hidden="true" tabindex="-1"></a>          <span class="at">title =</span> <span class="st">"Terrane"</span>)</span>
-<span id="cb48-42"><a href="#cb48-42" aria-hidden="true" tabindex="-1"></a>        ) <span class="sc">+</span> <span class="co"># customize legend line size  </span></span>
-<span id="cb48-43"><a href="#cb48-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Time (MYA)"</span>) <span class="sc">+</span></span>
-<span id="cb48-44"><a href="#cb48-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_inset</span>( pies, </span>
-<span id="cb48-45"><a href="#cb48-45" aria-hidden="true" tabindex="-1"></a>              <span class="at">width =</span> .<span class="dv">07</span>, </span>
-<span id="cb48-46"><a href="#cb48-46" aria-hidden="true" tabindex="-1"></a>              <span class="at">height =</span> .<span class="dv">07</span>, </span>
-<span id="cb48-47"><a href="#cb48-47" aria-hidden="true" tabindex="-1"></a>              <span class="at">hjust =</span> .<span class="dv">08</span>, </span>
-<span id="cb48-48"><a href="#cb48-48" aria-hidden="true" tabindex="-1"></a>              <span class="at">vjust =</span> .<span class="dv">4</span>)   <span class="co"># plot with multiple georegion probabilities</span></span>
-<span id="cb48-49"><a href="#cb48-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-50"><a href="#cb48-50" aria-hidden="true" tabindex="-1"></a><span class="fu">pdf</span>(<span class="at">file =</span> <span class="st">"../results/Fig4_DEC.pdf"</span>, <span class="at">height =</span> <span class="dv">10</span>, <span class="at">width =</span> <span class="dv">7</span>)</span>
-<span id="cb48-51"><a href="#cb48-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(p)</span>
-<span id="cb48-52"><a href="#cb48-52" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tippoint</span>( <span class="fu">aes</span>(<span class="at">color =</span> terrane, <span class="at">x=</span>x<span class="fl">+.22</span>), <span class="co"># georegions on tip points</span></span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>                 <span class="at">shape=</span><span class="dv">15</span>, </span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>                 <span class="at">size =</span> <span class="dv">1</span>, </span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a>                 <span class="at">show.legend =</span> F) <span class="sc">+</span></span>
+<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>( <span class="at">xintercept =</span> <span class="fu">c</span>(<span class="fl">4.71</span>, <span class="fl">9.71</span>, <span class="fl">14.71</span>), <span class="co"># vertical lines for time periods</span></span>
+<span id="cb48-13"><a href="#cb48-13" aria-hidden="true" tabindex="-1"></a>              <span class="at">linetype =</span> <span class="st">"dotted"</span>, </span>
+<span id="cb48-14"><a href="#cb48-14" aria-hidden="true" tabindex="-1"></a>              <span class="at">linewidth =</span> .<span class="dv">5</span>,</span>
+<span id="cb48-15"><a href="#cb48-15" aria-hidden="true" tabindex="-1"></a>              <span class="at">color =</span> <span class="st">"grey40"</span>) <span class="sc">+</span> </span>
+<span id="cb48-16"><a href="#cb48-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>( <span class="at">values =</span> sa<span class="sc">$</span>cols ) <span class="sc">+</span> <span class="co"># specify georegion colors </span></span>
+<span id="cb48-17"><a href="#cb48-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>( <span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">23</span>),   <span class="co"># x-axis tick placements</span></span>
+<span id="cb48-18"><a href="#cb48-18" aria-hidden="true" tabindex="-1"></a>                      <span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">4.71</span>, <span class="fl">9.71</span>, <span class="fl">14.71</span>, <span class="fl">19.71</span>), </span>
+<span id="cb48-19"><a href="#cb48-19" aria-hidden="true" tabindex="-1"></a>                      <span class="at">labels =</span> <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">15</span>, <span class="dv">10</span>, <span class="dv">5</span>, <span class="dv">0</span>)) <span class="sc">+</span></span>
+<span id="cb48-20"><a href="#cb48-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>( <span class="at">legend.position=</span><span class="fu">c</span>(<span class="fl">0.1</span>,.<span class="dv">88</span>), <span class="co"># customize the legend placement, text, title size</span></span>
+<span id="cb48-21"><a href="#cb48-21" aria-hidden="true" tabindex="-1"></a>         <span class="at">legend.text=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">8</span>),   <span class="co"># size of georegion categories</span></span>
+<span id="cb48-22"><a href="#cb48-22" aria-hidden="true" tabindex="-1"></a>         <span class="at">legend.title=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">12</span>), <span class="co"># title size</span></span>
+<span id="cb48-23"><a href="#cb48-23" aria-hidden="true" tabindex="-1"></a>         <span class="at">legend.key.size =</span> <span class="fu">unit</span>(.<span class="dv">8</span>, <span class="st">'lines'</span>), <span class="co"># key size</span></span>
+<span id="cb48-24"><a href="#cb48-24" aria-hidden="true" tabindex="-1"></a>         <span class="at">legend.key.width =</span> <span class="fu">unit</span>(.<span class="dv">25</span>, <span class="st">'cm'</span>),  <span class="co"># key width</span></span>
+<span id="cb48-25"><a href="#cb48-25" aria-hidden="true" tabindex="-1"></a>         <span class="at">legend.spacing.x =</span> <span class="fu">unit</span>(<span class="dv">2</span>, <span class="st">"mm"</span>),  <span class="co"># space between key and legend</span></span>
+<span id="cb48-26"><a href="#cb48-26" aria-hidden="true" tabindex="-1"></a>         <span class="at">legend.spacing.y =</span> <span class="fu">unit</span>(<span class="dv">0</span>, <span class="st">"mm"</span>),  <span class="co"># space between lines</span></span>
+<span id="cb48-27"><a href="#cb48-27" aria-hidden="true" tabindex="-1"></a>         <span class="at">legend.background=</span><span class="fu">element_blank</span>(), </span>
+<span id="cb48-28"><a href="#cb48-28" aria-hidden="true" tabindex="-1"></a>         <span class="at">axis.ticks.x =</span> <span class="fu">element_line</span>(<span class="at">linewidth =</span> .<span class="dv">4</span>), </span>
+<span id="cb48-29"><a href="#cb48-29" aria-hidden="true" tabindex="-1"></a>         <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
+<span id="cb48-30"><a href="#cb48-30" aria-hidden="true" tabindex="-1"></a>         <span class="at">axis.line.x =</span> <span class="fu">element_line</span>(<span class="at">linewidth =</span> .<span class="dv">4</span>),</span>
+<span id="cb48-31"><a href="#cb48-31" aria-hidden="true" tabindex="-1"></a>         <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb48-32"><a href="#cb48-32" aria-hidden="true" tabindex="-1"></a>         <span class="at">axis.ticks.length=</span><span class="fu">unit</span>(.<span class="dv">2</span>, <span class="st">"cm"</span>) </span>
+<span id="cb48-33"><a href="#cb48-33" aria-hidden="true" tabindex="-1"></a>       ) <span class="sc">+</span></span>
+<span id="cb48-34"><a href="#cb48-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>( <span class="at">color =</span> </span>
+<span id="cb48-35"><a href="#cb48-35" aria-hidden="true" tabindex="-1"></a>            <span class="fu">guide_legend</span>( <span class="at">override.aes=</span><span class="fu">list</span>(<span class="at">linewidth=</span><span class="dv">3</span>), <span class="co"># width of key line </span></span>
+<span id="cb48-36"><a href="#cb48-36" aria-hidden="true" tabindex="-1"></a>          <span class="at">title =</span> <span class="st">"Terrane"</span>)</span>
+<span id="cb48-37"><a href="#cb48-37" aria-hidden="true" tabindex="-1"></a>        ) <span class="sc">+</span> <span class="co"># customize legend line size  </span></span>
+<span id="cb48-38"><a href="#cb48-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Time (MYA)"</span>) <span class="sc">+</span></span>
+<span id="cb48-39"><a href="#cb48-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_inset</span>( pies, </span>
+<span id="cb48-40"><a href="#cb48-40" aria-hidden="true" tabindex="-1"></a>              <span class="at">width =</span> .<span class="dv">07</span>, </span>
+<span id="cb48-41"><a href="#cb48-41" aria-hidden="true" tabindex="-1"></a>              <span class="at">height =</span> .<span class="dv">07</span>, </span>
+<span id="cb48-42"><a href="#cb48-42" aria-hidden="true" tabindex="-1"></a>              <span class="at">hjust =</span> .<span class="dv">08</span>, </span>
+<span id="cb48-43"><a href="#cb48-43" aria-hidden="true" tabindex="-1"></a>              <span class="at">vjust =</span> .<span class="dv">4</span>)   <span class="co"># plot with multiple georegion probabilities</span></span>
+<span id="cb48-44"><a href="#cb48-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-45"><a href="#cb48-45" aria-hidden="true" tabindex="-1"></a><span class="do">## save the base plot above and add the tip labels here</span></span>
+<span id="cb48-46"><a href="#cb48-46" aria-hidden="true" tabindex="-1"></a><span class="do">## for flexibility, so we can easily swap out later</span></span>
+<span id="cb48-47"><a href="#cb48-47" aria-hidden="true" tabindex="-1"></a>q <span class="ot">&lt;-</span> p <span class="sc">+</span> <span class="fu">geom_tiplab</span>( <span class="fu">aes</span>(<span class="at">label=</span>label2),  <span class="co"># tip labels</span></span>
+<span id="cb48-48"><a href="#cb48-48" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> <span class="st">"black"</span>, </span>
+<span id="cb48-49"><a href="#cb48-49" aria-hidden="true" tabindex="-1"></a>           <span class="at">size =</span> <span class="dv">1</span>, </span>
+<span id="cb48-50"><a href="#cb48-50" aria-hidden="true" tabindex="-1"></a>           <span class="at">offset =</span> .<span class="dv">3</span>, </span>
+<span id="cb48-51"><a href="#cb48-51" aria-hidden="true" tabindex="-1"></a>           <span class="at">fontface =</span> <span class="dv">3</span>) </span>
+<span id="cb48-52"><a href="#cb48-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-53"><a href="#cb48-53" aria-hidden="true" tabindex="-1"></a><span class="fu">pdf</span>(<span class="at">file =</span> <span class="st">"../results/Fig4_DEC.pdf"</span>, <span class="at">height =</span> <span class="dv">10</span>, <span class="at">width =</span> <span class="dv">7</span>)</span>
+<span id="cb48-54"><a href="#cb48-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(q)</span>
+<span id="cb48-55"><a href="#cb48-55" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>quartz_off_screen 
                 2 </code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>p</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>q</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="biogeog_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>We also can plot the site names on the tree for more detail. That involves simply swaping out the label in <code>geom_tiplab</code>.</p>
+<p>We also can plot the site names on the tree for more detail. That involves simply swaping out the label (<code>label2</code> for <code>labels</code>) in <code>geom_tiplab</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>q <span class="ot">&lt;-</span> <span class="fu">ggtree</span>(tree, <span class="fu">aes</span>(<span class="at">color=</span>branchcol), <span class="at">size=</span>.<span class="dv">5</span>) <span class="sc">%&lt;+%</span> td <span class="sc">+</span> </span>
-<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tiplab</span>( <span class="fu">aes</span>(<span class="at">label=</span>labels),  <span class="co"># tip labels</span></span>
-<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">color =</span> <span class="st">"black"</span>, </span>
-<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">size =</span> <span class="dv">1</span>, </span>
-<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">offset =</span> .<span class="dv">3</span>, </span>
-<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">fontface =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tippoint</span>( <span class="fu">aes</span>(<span class="at">color =</span> terrane, <span class="at">x=</span>x<span class="fl">+.22</span>), <span class="co"># georegions on tip points</span></span>
-<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>                 <span class="at">shape=</span><span class="dv">15</span>, </span>
-<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a>                 <span class="at">size =</span> <span class="dv">1</span>, </span>
-<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a>                 <span class="at">show.legend =</span> F) <span class="sc">+</span></span>
-<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>( <span class="at">xintercept =</span> <span class="fu">c</span>(<span class="fl">4.71</span>, <span class="fl">9.71</span>, <span class="fl">14.71</span>), <span class="co"># vertical lines for time periods</span></span>
-<span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a>              <span class="at">linetype =</span> <span class="st">"dotted"</span>, </span>
-<span id="cb51-13"><a href="#cb51-13" aria-hidden="true" tabindex="-1"></a>              <span class="at">linewidth =</span> .<span class="dv">5</span>,</span>
-<span id="cb51-14"><a href="#cb51-14" aria-hidden="true" tabindex="-1"></a>              <span class="at">color =</span> <span class="st">"grey40"</span>) <span class="sc">+</span> </span>
-<span id="cb51-15"><a href="#cb51-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>( <span class="at">values =</span> sa<span class="sc">$</span>cols ) <span class="sc">+</span> <span class="co"># specify georegion colors </span></span>
-<span id="cb51-16"><a href="#cb51-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>( <span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">27</span>),   <span class="co"># x-axis tick placements</span></span>
-<span id="cb51-17"><a href="#cb51-17" aria-hidden="true" tabindex="-1"></a>                      <span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">4.71</span>, <span class="fl">9.71</span>, <span class="fl">14.71</span>, <span class="fl">19.71</span>), </span>
-<span id="cb51-18"><a href="#cb51-18" aria-hidden="true" tabindex="-1"></a>                      <span class="at">labels =</span> <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">15</span>, <span class="dv">10</span>, <span class="dv">5</span>, <span class="dv">0</span>)) <span class="sc">+</span></span>
-<span id="cb51-19"><a href="#cb51-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>( <span class="at">legend.position=</span><span class="fu">c</span>(<span class="fl">0.1</span>,.<span class="dv">88</span>), <span class="co"># customize the legend placement, text, title size</span></span>
-<span id="cb51-20"><a href="#cb51-20" aria-hidden="true" tabindex="-1"></a>         <span class="at">legend.text=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">8</span>),   <span class="co"># size of georegion categories</span></span>
-<span id="cb51-21"><a href="#cb51-21" aria-hidden="true" tabindex="-1"></a>         <span class="at">legend.title=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">12</span>), <span class="co"># title size</span></span>
-<span id="cb51-22"><a href="#cb51-22" aria-hidden="true" tabindex="-1"></a>         <span class="at">legend.key.size =</span> <span class="fu">unit</span>(.<span class="dv">8</span>, <span class="st">'lines'</span>), <span class="co"># key size</span></span>
-<span id="cb51-23"><a href="#cb51-23" aria-hidden="true" tabindex="-1"></a>         <span class="at">legend.key.width =</span> <span class="fu">unit</span>(.<span class="dv">25</span>, <span class="st">'cm'</span>),  <span class="co"># key width</span></span>
-<span id="cb51-24"><a href="#cb51-24" aria-hidden="true" tabindex="-1"></a>         <span class="at">legend.spacing.x =</span> <span class="fu">unit</span>(<span class="dv">2</span>, <span class="st">"mm"</span>),  <span class="co"># space between key and legend</span></span>
-<span id="cb51-25"><a href="#cb51-25" aria-hidden="true" tabindex="-1"></a>         <span class="at">legend.spacing.y =</span> <span class="fu">unit</span>(<span class="dv">0</span>, <span class="st">"mm"</span>),  <span class="co"># space between lines</span></span>
-<span id="cb51-26"><a href="#cb51-26" aria-hidden="true" tabindex="-1"></a>         <span class="at">legend.background=</span><span class="fu">element_blank</span>(), </span>
-<span id="cb51-27"><a href="#cb51-27" aria-hidden="true" tabindex="-1"></a>         <span class="at">axis.ticks.x =</span> <span class="fu">element_line</span>(<span class="at">linewidth =</span> .<span class="dv">4</span>), </span>
-<span id="cb51-28"><a href="#cb51-28" aria-hidden="true" tabindex="-1"></a>         <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
-<span id="cb51-29"><a href="#cb51-29" aria-hidden="true" tabindex="-1"></a>         <span class="at">axis.line.x =</span> <span class="fu">element_line</span>(<span class="at">linewidth =</span> .<span class="dv">4</span>),</span>
-<span id="cb51-30"><a href="#cb51-30" aria-hidden="true" tabindex="-1"></a>         <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
-<span id="cb51-31"><a href="#cb51-31" aria-hidden="true" tabindex="-1"></a>         <span class="at">axis.ticks.length=</span><span class="fu">unit</span>(.<span class="dv">2</span>, <span class="st">"cm"</span>) </span>
-<span id="cb51-32"><a href="#cb51-32" aria-hidden="true" tabindex="-1"></a>       ) <span class="sc">+</span></span>
-<span id="cb51-33"><a href="#cb51-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">color =</span> <span class="fu">guide_legend</span>( <span class="at">override.aes=</span><span class="fu">list</span>(<span class="at">linewidth=</span><span class="dv">3</span>), <span class="co"># width of key line </span></span>
-<span id="cb51-34"><a href="#cb51-34" aria-hidden="true" tabindex="-1"></a>                               <span class="at">title =</span> <span class="st">"Terrane"</span>)) <span class="sc">+</span> <span class="co"># customize legend line size  </span></span>
-<span id="cb51-35"><a href="#cb51-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Time (MYA)"</span>) <span class="sc">+</span></span>
-<span id="cb51-36"><a href="#cb51-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_inset</span>( pies, </span>
-<span id="cb51-37"><a href="#cb51-37" aria-hidden="true" tabindex="-1"></a>              <span class="at">width =</span> .<span class="dv">07</span>, </span>
-<span id="cb51-38"><a href="#cb51-38" aria-hidden="true" tabindex="-1"></a>              <span class="at">height =</span> .<span class="dv">07</span>, </span>
-<span id="cb51-39"><a href="#cb51-39" aria-hidden="true" tabindex="-1"></a>              <span class="at">hjust =</span> .<span class="dv">08</span>, </span>
-<span id="cb51-40"><a href="#cb51-40" aria-hidden="true" tabindex="-1"></a>              <span class="at">vjust =</span> .<span class="dv">4</span>)   <span class="co"># plot with multiple georegion probabilities</span></span>
-<span id="cb51-41"><a href="#cb51-41" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb51-42"><a href="#cb51-42" aria-hidden="true" tabindex="-1"></a><span class="fu">pdf</span>(<span class="at">file =</span> <span class="st">"../results/Fig4_DEC_sites.pdf"</span>, <span class="at">height =</span> <span class="dv">10</span>, <span class="at">width =</span> <span class="dv">7</span>)</span>
-<span id="cb51-43"><a href="#cb51-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(q)</span>
-<span id="cb51-44"><a href="#cb51-44" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> p <span class="sc">+</span> <span class="fu">geom_tiplab</span>( <span class="fu">aes</span>(<span class="at">label=</span>labels),  <span class="co"># tip labels</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> <span class="st">"black"</span>, </span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">size =</span> <span class="dv">1</span>, </span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">offset =</span> .<span class="dv">3</span>, </span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">fontface =</span> <span class="dv">3</span>) </span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a><span class="fu">pdf</span>(<span class="at">file =</span> <span class="st">"../results/Fig4_DEC_sites.pdf"</span>, <span class="at">height =</span> <span class="dv">10</span>, <span class="at">width =</span> <span class="dv">7</span>)</span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(r)</span>
+<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>quartz_off_screen 
                 2 </code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>q</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>r</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="biogeog_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
 </div>

@@ -7,8 +7,8 @@ format:
     toc: true
     number-sections: false
     highlight-style: github 
-bibliography: ../manuscript/references.bib
-csl: ../manuscript/evolution.csl
+bibliography: ../etc/references.bib
+csl: ../etc/evolution.csl
 ---
 
 
@@ -156,7 +156,7 @@ Consolidate probabilities for pie charts showing range transitions. BioGeoBEARS 
 
 ::: {.callout-tip}
 ## EXPLANATION:
-The trick is to find the label rows with each terrane letter, say:
+The trick is to find the label rows with each georegion letter, say "n":
 
 > n <- grep("n", column_labels)
 
@@ -299,7 +299,7 @@ The user can specify the names and preferred colors in the dataframe `georegion_
 
 We assemble all of the information needed to annotate the tree into one dataframe. The georegion probabilities at the nodes were created by BioGeoBEARS and saved in `prob_pies_13.csv` above, with rows in node order. We read in this dataframe to merge with the tree dataframe so that we can plot the pies on the tree using `ggtree`. We also add the georegions and the colors to the tree dataframe so that we have all of the information organized by rows (nodes). All of this information is saved in the dataframe `prob`.
 
-To reduce clutter on the tree, we only plot pies if they indicate some ambiguity (no need to plot 100% pies). `showpie` is a flag for nodes with ambiguity - to plot pies if the maximum category has probability less than 95%.
+To reduce clutter on the tree, we only plot pies if they indicate some ambiguity (no need to plot 100% pies). `showpie` is a flag for nodes with ambiguity - to plot pies if the alternative georegions that have prob > 5%.
 
 We use `treeio` [@Yu:2022] to do the tree data manipulation, which expects the first column of the dataframe to contain the node number.
 
@@ -311,7 +311,7 @@ head(prob)
 
 Once we have the probabilities of each georegion associated with each node, it is easy to create pies for each node.  
 
-We also merge the `prob` dataframe with the tree data by node. We now ahve all of the tree structure and metadata information in the `tree` and `td` objects. `pies` is a separate object to be used with the `geom_inset` to plot the pies on the tree.
+We also merge the `prob` dataframe with the tree data by node. We now have all of the tree structure and metadata information in the `tree` and `td` objects. `pies` is a separate object to be used with the `geom_inset` to plot the pies on the tree.
 
 ```{r, node_pies}
 ```
@@ -320,20 +320,22 @@ We also merge the `prob` dataframe with the tree data by node. We now ahve all o
 
 `ggtree` [@Yu:2022] extends `ggplot2` [@Wickham:2016] for elegantly plotting phylogenetic trees with annotations. 
 
-We use several geoms to create this plot, for tip labels, tip points, vertical lines, specifying custom colors with category names, axis breaks and labels, pies at the nodes, and customizing the legend.  The best way to see what they do is to comment out a line and see what it changes (or build them in one by one). 
+We use several geoms to create this plot, for tip labels, tip points, vertical lines, specifying custom colors with category names, axis breaks and labels, pies at the nodes, and customizing the legend.  We create the base tree plot without the tip labels so that we can switch labels easily in the next code chunk.
+
+The best way to see what they do is to comment out a line and see what it changes (or build them in one by one). 
 
 ```{r, plot_ggtree}
 ```
 ```{r}
-p
+q
 ```
 
-We also can plot the site names on the tree for more detail. That involves simply swaping out the label in `geom_tiplab`. 
+We also can plot the site names on the tree for more detail. That involves simply swaping out the label (`label2` for `labels`) in `geom_tiplab`. 
 
 ```{r, plot_ggtree_sites}
 ```
 ```{r}
-q
+r
 ```
 
 # Plot range transitions through time `genera_thru_time.R`

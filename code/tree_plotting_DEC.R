@@ -101,7 +101,7 @@ oo <- sapply( names(prob)[-1], grep, sn$code ) # match codes, get order
 names(prob)[-1] <- sn$states[oo]  # assign full names in order
 
 # Add branchcol = ancestral terranes, used for painting the branches
-# Add showpie, plot pie if max prob is < 95% 
+# Add showpie, plot pie if there are alternate georegions that have prob > 5% 
 prob <- prob %>% # the prob of each state
   mutate( branchcol = 
             apply( 
@@ -156,11 +156,6 @@ td <- full_join(
 ####################################################
 
 p <- ggtree(tree, aes(color=branchcol), size=.5) %<+% td + 
-  geom_tiplab( aes(label=label2),  # tip labels
-  			   color = "black", 
-  			   size = 1, 
-  			   offset = .3, 
-  			   fontface = 3) +
   geom_tippoint( aes(color = terrane, x=x+.22), # georegions on tip points
   				 shape=15, 
   				 size = 1, 
@@ -198,54 +193,27 @@ p <- ggtree(tree, aes(color=branchcol), size=.5) %<+% td +
   			  hjust = .08, 
   			  vjust = .4)   # plot with multiple georegion probabilities
 
+## save the base plot above and add the tip labels here
+## for flexibility, so we can easily swap out later
+q <- p + geom_tiplab( aes(label=label2),  # tip labels
+           color = "black", 
+           size = 1, 
+           offset = .3, 
+           fontface = 3) 
+
 pdf(file = "../results/Fig4_DEC.pdf", height = 10, width = 7)
-  print(p)
+  print(q)
 dev.off()  
 
 
 ## ---- plot_ggtree_sites ----
-q <- ggtree(tree, aes(color=branchcol), size=.5) %<+% td + 
-  geom_tiplab( aes(label=labels),  # tip labels
-  			   color = "black", 
-  			   size = 1, 
-  			   offset = .3, 
-  			   fontface = 3) +
-  geom_tippoint( aes(color = terrane, x=x+.22), # georegions on tip points
-  				 shape=15, 
-  				 size = 1, 
-  				 show.legend = F) +
-  geom_vline( xintercept = c(4.71, 9.71, 14.71), # vertical lines for time periods
-  			  linetype = "dotted", 
-  			  linewidth = .5,
-  			  color = "grey40") + 
-  scale_color_manual( values = sa$cols ) + # specify georegion colors 
-  scale_x_continuous( limits = c(-1, 27),   # x-axis tick placements
-  					  breaks = c(0, 4.71, 9.71, 14.71, 19.71), 
-  					  labels = c(20, 15, 10, 5, 0)) +
-  theme( legend.position=c(0.1,.88), # customize the legend placement, text, title size
-         legend.text=element_text(size=8),   # size of georegion categories
-         legend.title=element_text(size=12), # title size
-         legend.key.size = unit(.8, 'lines'), # key size
-         legend.key.width = unit(.25, 'cm'),  # key width
-         legend.spacing.x = unit(2, "mm"),  # space between key and legend
-         legend.spacing.y = unit(0, "mm"),  # space between lines
-         legend.background=element_blank(), 
-         axis.ticks.x = element_line(linewidth = .4), 
-         axis.text.x = element_text(size = 8),
-         axis.line.x = element_line(linewidth = .4),
-         axis.title.x = element_text(size = 12),
-         axis.ticks.length=unit(.2, "cm") 
-       ) +
-  guides(color = guide_legend( override.aes=list(linewidth=3), # width of key line 
-  							   title = "Terrane")) + # customize legend line size  
-  xlab("Time (MYA)") +
-  geom_inset( pies, 
-  			  width = .07, 
-  			  height = .07, 
-  			  hjust = .08, 
-  			  vjust = .4)   # plot with multiple georegion probabilities
+r <- p + geom_tiplab( aes(label=labels),  # tip labels
+           color = "black", 
+           size = 1, 
+           offset = .3, 
+           fontface = 3) 
   
 pdf(file = "../results/Fig4_DEC_sites.pdf", height = 10, width = 7)
-  print(q)
+  print(r)
 dev.off()  
   

@@ -211,7 +211,7 @@ write.csv(pies, "../results/models/prob_pies_13.csv", row.names=F)
 # scores <- read.csv("../../results/models/modelfit.csv")
 
 
-pdf(file = "../results/h_DEC2.pdf", height = 45, width = 20)
+pdf(file = "../results/h_DEC.pdf", height = 45, width = 20)
   plot_BioGeoBEARS_results( best_fit,
                             plotwhat = "pie",
                             splitcex=.4,
@@ -237,7 +237,18 @@ dev.off()
 ##############################################
 
 if( run_sensitivity_analysis ) { # Will take 30 hours of run time
-	
+
+  # Save the scores from best models, observed + 100 trees
+  # First row is the observed result
+  best_models <- read.csv("../results/models/modelfittable.csv")[1,]
+  best_models <- cbind(best_models, "tree"=treefile)   # Add tree path
+  write.table( best_models, 
+					 "../results/models/modelfit_sensitivity.csv", 
+					 quote=FALSE,
+					 sep=",", 
+					 row.names=FALSE
+				  ) 
+
   # Top 100 trees from BEAST analysis 
   # All other inputs remain the same 
   trees <- list.files(
@@ -245,20 +256,22 @@ if( run_sensitivity_analysis ) { # Will take 30 hours of run time
 					 full.names = TRUE
 				   ) # vector of tree files
 
-  # Save the scores from best models, observed + 100 trees
-  # First row is the observed result
-  best_models <- read.csv("../results/models/modelfit.csv")[1,]
-  best_models <- cbind(best_models, "tree"=tree)   # Add tree path
-    	           
-  ### Interate over trees: assemble hypotheses, run models, collect scores
+  ### Interate over trees: assemble hypotheses, run models, print scores
   for (tree in trees) {
+  	print(paste("Analyzing tree:", tree))
 
   	h <- hypothesis_list( hyp_dm, hyp_ts, hyp_un, tree, geo, 
   	                      dispersal, timeperiods, areasallowed)
     fit <- lapply( h, bears_optim_run )
   	scores <- cbind( model_fit_table(fit), "tree"=tree )
-  	best_models <- rbind( best_models, scores[1,] ) 
 
+    write.table( scores[1,], 
+    					  "../results/models/modelfit_sensitivity.csv", 
+    					  append=TRUE, 
+    					  quote=FALSE,
+    					  sep=",", 
+    					  row.names=FALSE, 
+    					  col.names=FALSE
+    					 ) 
   }  
-  write.csv(best_models, "../results/models/modelfit_sensitivity.csv", row.names = FALSE)
 }
