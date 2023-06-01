@@ -1,3 +1,0 @@
-id,hypotheses,delta_aic,m2logL,df,dispersal,extinction,tree
-h,offshore_with_nearest_mainland,0,996.256756354401,2,0.0093888734851282,0.0206154114970986,../data/biogeo.tree
-h,offshore_with_nearest_mainland,0,983.372647793662,2,0.00894233800303664,0.0187671934929194,../data/sensitivity_trees/tree_99.nwk
