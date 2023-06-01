@@ -4,7 +4,7 @@
 
 ## History
 
-2023-05-28 First release with data, code, and results folders.
+2023-06-01 First release with data, code, results, and etc folders.
 
 ## Software requirements
 
@@ -17,6 +17,7 @@ The description of the directory structure is as follows (Please see the `README
 * All data is in the `data` folder or is referenced as a link to a publicly available file.
 * All code is in the `code` folder. An explanation of all of the code is in the quarto file `biogeog.qmd`, and rendered for easy reading in `biogeog.html` (open the .html in a browser).
 * All results (figures, tables, computed values) are saved into the `results` folder.
+* Accessory files needed for the bibliography and styles are in the `etc` folder.
 * The `LaTeX` file for the manuscript and its component parts are in the `manuscript` folder.
 * See the various `README.md` files in those folders for some more information.
 
