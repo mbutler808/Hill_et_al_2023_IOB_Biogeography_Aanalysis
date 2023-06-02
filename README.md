@@ -1,4 +1,5 @@
 # biogeography
+[![DOI](https://zenodo.org/badge/646599963.svg)](https://zenodo.org/badge/latestdoi/646599963)
 
 ## This repository contains the analysis for "Testing geology with biology: Plate tectonics and the diversification of microhylid frogs in the Papuan region"
 
