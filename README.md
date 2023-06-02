@@ -4,7 +4,7 @@
 
 ## History
 
-2023-06-01 First release with data, code, results, and etc folders.
+2023-06-01 First release with data, code, results, and etc folders.  
 
 ## Software requirements
 
