@@ -12,3 +12,29 @@ version: v1.0.0
 doi: 10.5281/zenodo.7996620   
 date-released: 2023-06-01  
 url: "https://github.com/mbutler808/Hill_et_al_2023_IOB_Biogeography_Analysis"  
+preferred-citation:  
+  type: article  
+  authors:  
+  - family-names: "Hill"  
+    given-names: "Ethan C."  
+    orcid: "https://orcid.org/0000-0003-0417-350X"  
+  - family-names: "Gao"  
+    given-names: "Diana F."  
+    orcid: "https://orcid.org/0000-0002-4314-7788"  
+  - family-names: "Polhemus"  
+    given-names: "Dan A."  
+    orcid: "https://orcid.org/0000-0001-6132-6475"  
+  - family-names: "Fraser"  
+    given-names: "Claire J."  
+    orcid: "https://orcid.org/0000-0002-4314-7788"  
+  - family-names: "Iova"  
+    given-names: "Bulisa"  
+  - family-names: "Allison"  
+    given-names: "Allen"  
+    orcid: "https://orcid.org/0000-0002-0671-4050"  
+  - family-names: "Butler"  
+    given-names: "Marguerite A."  
+    orcid: "https://orcid.org/0000-0002-2039-5965"  
+  journal: "Integrative Organismal Biology"  
+  title: "Testing geology with biology: Plate tectonics and the diversification of microhylid frogs in the Papuan region"  
+  year: 2023  
