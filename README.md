@@ -7,6 +7,10 @@
 
 2023-06-01 First release with data, code, results, and etc folders.  
 
+## Overview
+
+This repository supports the paper _Hill et al (2023 in press)_, which tests hypotheses of biogeographical evolution in the hyperdiverse asterophryine frogs of the New Guinea region. A major idea is that plate tectonics can explain the hyperdiversity of these frogs by amplifying opportunities for dispersal and cladogenesis. We use DEC biogeographic models implemented in the R packages `BioGeoBEARS` and produce plots using `ggplot2` and `ggtree`. See the code and data explainer provided in `code/biogeog.html` and the paper _Hill et al (2023 in press)_ published in _Integrative Organismal Biology_.
+
 ## Software requirements
 
 This repository requires use of R, Quarto, Github and a reference manager for bibtex. A plain text editor is also necessary. 
